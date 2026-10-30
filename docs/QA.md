@@ -17,6 +17,7 @@ Aktualizováno 30. 10. 2026. Testováno na Windows s Pythonem 3.13.17 a místní
 - Skutečný AI dotaz na schválení nákupu nad 80 000 Kč vrátil ředitelku a vlastníka společnosti s doslovným citátem z povoleného dokumentu. Server ověřil, že citát ve zdroji opravdu je.
 - Vedení vidělo všech 9 souborů. Kontrolní panel po doplnění součtu hodnoty objednávek vykázal **8/8** průchodů přímo v prohlížeči.
 - Hlavní rozhraní bylo vizuálně zkontrolováno v prohlížeči i v mobilním viewportu 390 × 844 px. Mobilní průchod odhalil nevhodně zobrazený seznam složek; CSS bylo opraveno a náhled znovu zkontrolován.
+- Po zjednodušení vizuálu bylo rozhraní znovu zkontrolováno na šířce 1440 px a 390 px. Nový střídmý styl se načetl bez chyby, dotaz na objednávky v roce 2024 vrátil 12, změna na personální roli vymazala starou odpověď, panel vedení vykázal 8/8 kontrol a mobilní stránka neměla vodorovné přetečení. Přepnutí sekce vrací stránku nahoru. Aktuální desktopový náhled je v `docs/preview.png`.
 
 ## Orientační rychlost
 

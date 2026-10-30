@@ -20,6 +20,7 @@ Demonstrate Python, SQL, document retrieval, AI integration, role-aware access, 
 ## Verified status
 
 13 automated tests pass. Browser walkthrough covered order counts, role filtering, forbidden query, role-change stale-answer cleanup, live AI summary with a matching evidence quote, and leadership QA panel. README and QA.md contain current limits and results.
+The visual layer was simplified on 2026-10-30: a neutral document-workspace palette, plain headings and controls, and no decorative AI orbit. Authorization and answer behavior were left intact; desktop and mobile browser checks were repeated.
 
 ## Next scope candidates
 
