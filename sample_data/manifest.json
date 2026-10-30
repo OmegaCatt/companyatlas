@@ -1,0 +1,11 @@
+[
+  {"id":"orders-2024","path":"objednavky/objednavky_2024.csv","title":"Objednávky 2024","group":"orders","kind":"csv","description":"Export objednávek za rok 2024"},
+  {"id":"orders-2025","path":"objednavky/objednavky_2025.csv","title":"Objednávky 2025","group":"orders","kind":"csv","description":"Export objednávek za rok 2025"},
+  {"id":"supplier-sla","path":"dodavatele/servisni_podminky.md","title":"Servisní podmínky dodavatele","group":"operations","kind":"document","description":"Lhůty pro servis a eskalaci"},
+  {"id":"purchase-policy","path":"dodavatele/pravidla_nakupu.md","title":"Pravidla schvalování nákupu","group":"operations","kind":"document","description":"Limity a schvalovací postup"},
+  {"id":"hr-onboarding","path":"lide/zaskoleni.md","title":"Zaškolení nových kolegů","group":"people","kind":"document","description":"Postup nástupu a první týden"},
+  {"id":"hr-leave","path":"lide/dovolena.md","title":"Pravidla dovolené","group":"people","kind":"document","description":"Žádosti o dovolenou a předání práce"},
+  {"id":"hr-record","path":"lide/osobni_slozka_klara.md","title":"Osobní složka Kláry Váchové","group":"people","kind":"document","description":"Fiktivní personální záznam"},
+  {"id":"shared-guide","path":"sdilene/prirucka.md","title":"Firemní příručka","group":"shared","kind":"document","description":"Základní informace pro všechny týmy"},
+  {"id":"leadership-plan","path":"vedeni/plan_2025.md","title":"Plán vedení 2025","group":"leadership","kind":"document","description":"Fiktivní interní strategie"}
+]

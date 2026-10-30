@@ -1,0 +1,13 @@
+id,datum,zakaznik,status,castka_czk
+O-2401,2024-01-12,Studio Javor,dokoncena,12500
+O-2402,2024-02-03,Ateliér Novák,dokoncena,15800
+O-2403,2024-02-22,Lumen Labs,dokoncena,18600
+O-2404,2024-03-15,Studio Javor,stornovana,0
+O-2405,2024-04-04,Novák Trade,dokoncena,33200
+O-2406,2024-05-17,Studio Javor,dokoncena,25200
+O-2407,2024-06-02,Lumen Labs,dokoncena,9100
+O-2408,2024-07-08,Ateliér Novák,dokoncena,21400
+O-2409,2024-08-19,Studio Javor,dokoncena,31000
+O-2410,2024-09-03,Novák Trade,dokoncena,14700
+O-2411,2024-10-11,Studio Javor,dokoncena,12000
+O-2412,2024-11-29,Lumen Labs,dokoncena,16800
