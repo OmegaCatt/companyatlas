@@ -28,3 +28,9 @@ Na malé fiktivní sadě trvalo 1 000 sekvenčních SQL dotazů na počet objedn
 Oprávnění se používají před výběrem dokumentů i při jejich otevření. Chybné ID zdroje nebo neexistující doslovný citát vedou k odmítnutí AI odpovědi. Požadavky jsou omezené na 4 096 bajtů, místní `Host`/`Origin`, dvě souběžná AI volání a 20 AI volání za 24 hodin v běžícím procesu. JSON API používá hlavičky CSP a `nosniff`; vstupní text se v klientu zobrazuje přes `textContent`.
 
 Výběr role bez hesla znamená, že tato ukázka nemůže chránit skutečná data. Není veřejně nasazená a její místní server nemá trvalou ochranu placeného API provozu při restartu. Doslovný citát potvrzuje výskyt textu, nikoli správnou interpretaci.
+
+## Kontrola vyhledávání 31. 10. 2026
+
+Čtrnáct serverových testů prošlo. Nový test ověřuje vyhledání slova pouze v obsahu dokumentu, zákaz hledání bez relace, filtr rolí a to, že výsledky obsahují pouze metadata. Vyhledávání čte povolené dokumenty jedním SQL dotazem. Prohlížeč ověřil personální výsledek, přepnutí na provozní roli, vymazání starého hledání a mobilní šířku bez vodorovného přetečení. Přepnutí role okamžitě skryje předchozí seznam souborů a zastaví rozpracované hledání.
+
+Místní orientační měření po změně: 1 000 sekvenčních vyhledání přibližně 391 ms (stejný malý fiktivní dataset). Srovnání se starším měřením 1 201 ms je orientační; nešlo o řízený výkonový experiment.

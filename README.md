@@ -14,7 +14,7 @@ Fiktivní Severka Studio má 9 souborů a 15 objednávek. Dotaz „Kolik objedn�
 
 ### Co aplikace předvádí
 
-- **Průzkumník souborů:** složky, filtrování názvů, otevření zdrojového CSV nebo textového dokumentu. Server vrací pouze soubory povolené aktuální roli.
+- **Průzkumník souborů:** složky, hledání v názvech i obsahu a otevření zdrojového CSV nebo textového dokumentu. Server filtruje výsledky podle aktuální role ještě před hledáním a vrací pouze metadata.
 - **Přesné výpočty:** dotazy na počet a hodnotu objednávek zpracovávají parametrizované SQLite dotazy, nikoli odhad jazykového modelu.
 - **AI odpovědi nad texty:** server předá OpenAI pouze relevantní povolené dokumenty. AI musí vrátit doslovné citáty; server ověří jejich výskyt ve zdrojích a odmítne neplatné odkazy. Citát sám o sobě ještě nedokazuje správnost interpretace.
 - **Role:** provoz a nákup vidí objednávky, dodavatele a sdílené soubory; péče o lidi vidí personální a sdílené soubory; vedení vidí vše. Přístup se kontroluje na serveru před vyhledáváním i při otevření souboru.
@@ -52,7 +52,7 @@ The sample company contains 9 files and 15 orders. A question about 2024 orders 
 
 ### Features
 
-- Browse and filter only files allowed for the selected demo role; open their original CSV or Markdown content.
+- Browse and search titles and contents of files allowed for the selected demo role; open their original CSV or Markdown content. Search returns metadata only.
 - Answer order-count and order-value questions with parameterized SQLite queries. The language model does not calculate these totals.
 - Summarize accessible documents with OpenAI. The model supplies verbatim evidence quotes, which the server checks against the authorized source files.
 - Demonstrate backend access checks for operations, people, and leadership roles, plus eight built-in QA scenarios and an audit trail that omits question text.

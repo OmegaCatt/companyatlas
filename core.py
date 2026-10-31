@@ -125,11 +125,18 @@ def search_documents(connection: sqlite3.Connection, role: str, question: str, l
     tokens = [token for token in re.findall(r"[a-z0-9]{3,}", normalize(question)) if token not in STOP_WORDS]
     if not tokens:
         return []
+    groups = allowed_groups(role)
+    placeholders = ",".join("?" for _ in groups)
+    rows = connection.execute(
+        f"SELECT id, path, title, group_name, kind, description, content FROM documents WHERE group_name IN ({placeholders}) ORDER BY path",
+        groups,
+    ).fetchall()
     candidates = []
-    for item in visible_documents(connection, role):
-        document = get_document(connection, role, item["id"])
-        haystack = normalize(document["title"] + " " + document["description"] + " " + document["content"])
-        score = sum(2 if token in normalize(document["title"]) else 1 for token in tokens if token in haystack)
+    for row in rows:
+        document = dict(row)
+        title = normalize(document["title"])
+        haystack = title + " " + normalize(document["description"] + " " + document["content"])
+        score = sum(2 if token in title else 1 for token in tokens if token in haystack)
         if score:
             document["score"] = score
             candidates.append(document)

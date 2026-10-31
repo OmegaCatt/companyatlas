@@ -69,6 +69,21 @@ class ServerTests(unittest.TestCase):
         self.assertEqual((status, answer["count"]), (200, 12))
         self.assertEqual(answer["sources"][0]["id"], "orders-2024")
 
+    def test_content_search_is_role_filtered_and_returns_metadata_only(self):
+        self.assertEqual(self.request('/api/search?q=za%C5%A1kolen%C3%AD')[0], 401)
+        people = self.login('people')
+        status, result, _ = self.request('/api/search?q=za%C5%A1kolen%C3%AD', cookie=people)
+        self.assertEqual(status, 200)
+        self.assertTrue(result['files'])
+        self.assertTrue(all('content' not in item for item in result['files']))
+        status, content_match, _ = self.request('/api/search?q=zastupov%C3%A1n%C3%AD', cookie=people)
+        self.assertEqual(status, 200)
+        self.assertIn('hr-leave', [item['id'] for item in content_match['files']])
+        self.assertEqual(self.request('/api/search?q=objedn%C3%A1vek', cookie=people)[1]['files'], [])
+        operations = self.login('operations')
+        self.assertEqual(self.request('/api/search?q=za%C5%A1kolen%C3%AD', cookie=operations)[1]['files'], [])
+        self.assertEqual(self.request('/api/search?q=ab', cookie=operations)[0], 400)
+
     def test_rejects_cross_origin_oversize_and_bad_role(self):
         status, _, _ = self.request("/api/login", method="POST", body={"role": "root"})
         self.assertEqual(status, 400)

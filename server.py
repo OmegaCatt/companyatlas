@@ -13,7 +13,7 @@ from http import HTTPStatus
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 from ai import AIUnavailable, MODEL, answer_with_ai, read_api_key
 from core import (
@@ -206,6 +206,13 @@ class AtlasHandler(BaseHTTPRequestHandler):
         with closing(connect(self.state.database_path)) as connection:
             if path == "/api/overview":
                 self._json(HTTPStatus.OK, {"role": role, "name": ROLE_NAMES[role], "metrics": metrics(connection, role), "files": visible_documents(connection, role)})
+            elif path == "/api/search":
+                query = parse_qs(urlsplit(self.path).query).get("q", [""])[0].strip()
+                if not 3 <= len(query) <= 100:
+                    self._json(HTTPStatus.BAD_REQUEST, {"error": "Hledaný text musí mít 3 až 100 znaků."})
+                    return
+                matches = search_documents(connection, role, query, limit=30)
+                self._json(HTTPStatus.OK, {"files": [{key: item[key] for key in ("id", "path", "title", "group_name", "kind", "description")} for item in matches]})
             elif path.startswith("/api/files/"):
                 document_id = path.removeprefix("/api/files/")
                 if not re.fullmatch(r"[a-z0-9-]{1,40}", document_id):
