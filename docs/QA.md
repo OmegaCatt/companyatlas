@@ -1,5 +1,9 @@
 # Ověření CompanyAtlas
 
+## Doplnění 31. 10. 2026: vysvětlení a předání odpovědi
+
+Automatické serverové testy prošly 14/14. Prohlížečový průchod otevřel nový technický přehled, položil přesný dotaz na rok 2024, stáhl odpověď se zdroji a započítanými řádky a ověřil, že změna role odpověď skryje. Mobilní viewport 390 px neměl vodorovné přetečení. Stažený text je místní soubor; uživatel může dříve staženou kopii nadále uchovat.
+
 Aktualizováno 30. 10. 2026. Testováno na Windows s Pythonem 3.13.17 a místním serverem.
 
 ## Automatizované kontroly

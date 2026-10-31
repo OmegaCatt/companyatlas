@@ -24,8 +24,22 @@ async function ask(event){event.preventDefault();const question=$('question').va
 async function showView(view){const generation=state.generation;state.view=view;const isQa=view==='qa';$('explorer-view').classList.toggle('hidden',isQa);$('qa-view').classList.toggle('hidden',!isQa);$('current-section').textContent=isQa?'Testy a ověření':'Průzkumník';for(const button of document.querySelectorAll('.side-link'))button.classList.toggle('active',button.dataset.view===view);if(isQa){if(state.role!=='leadership'){showToast('Kontrolní panel je dostupný roli vedení.');await showView('explorer');return;}const [evals,audit]=await Promise.all([api('/api/evals'),api('/api/audit')]);if(generation===state.generation&&state.view==='qa')renderQa(evals,audit);} }
 function renderQa(evals,audit){const passed=evals.checks.filter(check=>check.passed).length;$('qa-score').textContent=`${passed}/${evals.checks.length}`;const root=$('qa-list');root.replaceChildren();for(const check of evals.checks){const row=el('div','qa-row');row.append(el('span','qa-icon '+(check.passed?'pass':'fail'),check.passed?'✓':'!'),el('strong','',check.name),el('span','qa-result',check.passed?'Prošlo':'Selhalo'));root.append(row);}const list=$('audit-list');list.replaceChildren();if(!audit.events.length){list.append(el('p','empty','Zatím žádné události.'));return;}for(const item of audit.events){const row=el('div','audit-row');row.append(el('span','audit-dot','●'),el('span','',`${item.role} · ${item.event} · ${item.result}`),el('time','',item.created_at));list.append(row);} }
 async function start(){try{const health=await api('/api/health');$('ai-status').textContent=health.aiConfigured?'AI dostupná':'AI není nastavena';const session=await api('/api/session');if(session.role){state.role=session.role;await loadOverview();}else await login('operations');}catch(error){showToast(error.message);$('ai-status').textContent='Server není dostupný';}}
+function downloadAnswer(){
+  if($('answer-section').classList.contains('hidden'))return;
+  const lines=['CompanyAtlas – odpověď s podklady','',$('answer-text').textContent,'',$('answer-method').textContent,''];
+  for(const item of $('answer-sources').children){
+    if(item.classList.contains('source-chip'))lines.push('Zdroj: '+item.textContent);
+    if(item.classList.contains('source-quote'))lines.push('Citát: '+item.textContent);
+  }
+  const rows=$('answer-rows').querySelectorAll('tbody tr');
+  if(rows.length){lines.push('','Započítané záznamy:');for(const row of rows)lines.push([...row.cells].map(cell=>cell.textContent).join(' | '));}
+  lines.push('','Ukázková data. Před použitím závěru ověřte zdroje.');
+  const url=URL.createObjectURL(new Blob([lines.join('\n')+'\n'],{type:'text/plain;charset=utf-8'}));
+  const link=el('a');link.href=url;link.download='companyatlas_odpoved.txt';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
 $('role-select').addEventListener('change',async event=>{const select=event.target;select.disabled=true;try{await login(select.value);}catch(error){showToast(error.message);}finally{select.disabled=false;}});
 $('ask-form').addEventListener('submit',ask);
+$('download-answer').addEventListener('click',downloadAnswer);
 $('file-filter').addEventListener('input',searchFiles);
 $('dialog-close').addEventListener('click',()=>$('file-dialog').close());
 for(const button of document.querySelectorAll('.side-link'))button.addEventListener('click',()=>{window.scrollTo(0,0);showView(button.dataset.view).catch(error=>showToast(error.message));});

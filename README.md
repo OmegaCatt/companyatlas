@@ -18,7 +18,8 @@ Fiktivní Severka Studio má 9 souborů a 15 objednávek. Dotaz „Kolik objedn�
 - **Přesné výpočty:** dotazy na počet a hodnotu objednávek zpracovávají parametrizované SQLite dotazy, nikoli odhad jazykového modelu.
 - **AI odpovědi nad texty:** server předá OpenAI pouze relevantní povolené dokumenty. AI musí vrátit doslovné citáty; server ověří jejich výskyt ve zdrojích a odmítne neplatné odkazy. Citát sám o sobě ještě nedokazuje správnost interpretace.
 - **Role:** provoz a nákup vidí objednávky, dodavatele a sdílené soubory; péče o lidi vidí personální a sdílené soubory; vedení vidí vše. Přístup se kontroluje na serveru před vyhledáváním i při otevření souboru.
-- **QA a audit:** osm kontrolních scénářů pro přesnost a přístupová pravidla, třináct automatizovaných testů a protokol událostí bez ukládání textu dotazů.
+- **QA a audit:** osm kontrolních scénářů pro přesnost a přístupová pravidla, čtrnáct automatizovaných testů a protokol událostí bez ukládání textu dotazů.
+- **Předání výsledku:** viditelnou odpověď lze stáhnout jako text se zdroji a započítanými řádky. Rozklikávací panel vysvětluje technologii, práci s API a hranice ukázkových rolí.
 
 ### Spuštění
 
@@ -56,6 +57,7 @@ The sample company contains 9 files and 15 orders. A question about 2024 orders 
 - Answer order-count and order-value questions with parameterized SQLite queries. The language model does not calculate these totals.
 - Summarize accessible documents with OpenAI. The model supplies verbatim evidence quotes, which the server checks against the authorized source files.
 - Demonstrate backend access checks for operations, people, and leadership roles, plus eight built-in QA scenarios and an audit trail that omits question text.
+- Download the visible answer with its authorized sources and counted rows as a text file. An expandable note explains the stack, API use, and demo-role limitations.
 
 ### Run and test
 

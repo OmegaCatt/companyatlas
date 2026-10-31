@@ -122,3 +122,12 @@ dialog::backdrop { background: #172531a8; }
   .hero h1, .qa-head h1 { font-size: 23px; }
   .stat { min-height: 81px; }
 }
+.tech-details{margin:0 0 22px;border:1px solid #d9dee2;background:#fff;border-radius:6px;padding:0 18px}
+.tech-details summary{cursor:pointer;padding:14px 0;font-size:13px;font-weight:650}
+.tech-details summary span{float:right;color:#697782;font-size:11px;font-weight:400}
+.tech-body{border-top:1px solid #e7ebee;padding:5px 0 12px}
+.tech-body p{font-size:12px;line-height:1.7;color:#52616b;margin:10px 0}
+.answer-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#download-answer{border:1px solid #cbd4da;background:#fff;color:#26313d;border-radius:5px;padding:8px 11px;cursor:pointer;font:inherit;font-size:11px}
+#download-answer:hover{background:#f2f5f6}
+@media(max-width:600px){.tech-details summary span{display:block;float:none;margin-top:3px}}
