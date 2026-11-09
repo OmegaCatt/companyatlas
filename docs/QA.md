@@ -1,10 +1,14 @@
+## Ověřený vzdálený běh
+
+GitHub Actions úspěšně ověřily kód `e267526`: [výsledek kontroly](https://github.com/OmegaCatt/companyatlas/actions/runs/42685515544). Výsledek se vztahuje k uvedenému commitu; změny pouze dokumentace nepřidávají nové funkce.
+
 # Druhá etapa 9. 11. 2026 – CA-1a/b/c, CA-2a a CA-3a
 
 18 automatických testů prošlo. Samostatná offline evaluace 50/50 má 16 metrik, 10 upřesnění, 6 odmítnutí přístupu, 14 vyhledání textových zdrojů a 4 dotazy bez podkladu. Živý běh před úpravou vykázal 6/8; po explicitním `supported` a opravě příliš přísného očekávání u časové otázky nový běh 8/8. Odpovědi byly posouzeny vůči zdrojům; podrobnosti, oba reporty a hranice jsou v EVALUATION.md. Nejde o obecnou přesnost ani úplné ověření prompt injection.
 
 Browser QA na skutečném serveru s vypnutým API: SQL dotaz, odmítnutí průměru, boční náhled, Escape a vrácení fokusu, jedna simulovaná AI odpověď pro zobrazení citátu, zadržená odpověď souboru po změně role, vymazání obsahu, odmítnutý přístup k objednávkám, desktop 1440 px a mobil 390 px bez přetečení/JS chyb. Mobilní náhled brání fokusu do zakryté plochy, Tab přepíná zavření a posouvatelný obsah.
 
-CI nově spouští unittest, offline evaluaci a browser QA bez klíče; nahrává report a screenshoty. Vzdálený výsledek této etapy ještě nebyl ověřen. PDF/DOCX, životní cyklus indexu, pevná identita a širší opakovaná živá evaluace zůstávají otevřené.
+CI nově spouští unittest, offline evaluaci a browser QA bez klíče; nahrává report a screenshoty. Vzdálený výsledek kódu je úspěšně ověřen; viz odkaz v úvodu. PDF/DOCX, životní cyklus indexu, pevná identita a širší opakovaná živá evaluace zůstávají otevřené.
 
 Následující zápisy jsou historické etapy.
 
