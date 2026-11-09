@@ -1,0 +1,629 @@
+{
+  "version": 1,
+  "fixture": "sample_data/manifest.json",
+  "cases": [
+    {
+      "id": "CA-01",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024?",
+      "expected": {
+        "kind": "metric",
+        "count": 12,
+        "amountCzk": 210300,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-02",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2025?",
+      "expected": {
+        "kind": "metric",
+        "count": 3,
+        "amountCzk": 43200,
+        "sourceIds": [
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-03",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo celkem?",
+      "expected": {
+        "kind": "metric",
+        "count": 15,
+        "amountCzk": 253500,
+        "sourceIds": [
+          "orders-2024",
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-04",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2023?",
+      "expected": {
+        "kind": "metric",
+        "count": 0,
+        "amountCzk": 0,
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-05",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024 a 2025?",
+      "expected": {
+        "kind": "metric",
+        "count": 15,
+        "amountCzk": 253500,
+        "sourceIds": [
+          "orders-2024",
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-06",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024–2025?",
+      "expected": {
+        "kind": "metric",
+        "count": 15,
+        "amountCzk": 253500,
+        "sourceIds": [
+          "orders-2024",
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-07",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik dokončených objednávek bylo 2024?",
+      "expected": {
+        "kind": "metric",
+        "count": 11,
+        "amountCzk": 210300,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-08",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik stornovaných objednávek bylo 2024?",
+      "expected": {
+        "kind": "metric",
+        "count": 1,
+        "amountCzk": 0,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-09",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik dokončených objednávek bylo 2025?",
+      "expected": {
+        "kind": "metric",
+        "count": 2,
+        "amountCzk": 43200,
+        "sourceIds": [
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-10",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik stornovaných objednávek bylo 2025?",
+      "expected": {
+        "kind": "metric",
+        "count": 1,
+        "amountCzk": 0,
+        "sourceIds": [
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-11",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024 pro Studio Javor?",
+      "expected": {
+        "kind": "metric",
+        "count": 5,
+        "amountCzk": 80700,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-12",
+      "category": "metric",
+      "role": "operations",
+      "question": "Jaká byla hodnota objednávek pro Studio Javor?",
+      "expected": {
+        "kind": "metric",
+        "count": 6,
+        "amountCzk": 99700,
+        "sourceIds": [
+          "orders-2024",
+          "orders-2025"
+        ]
+      }
+    },
+    {
+      "id": "CA-13",
+      "category": "metric",
+      "role": "operations",
+      "question": "Jaká byla hodnota objednávek 2024 pro Lumen Labs?",
+      "expected": {
+        "kind": "metric",
+        "count": 3,
+        "amountCzk": 44500,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-14",
+      "category": "metric",
+      "role": "operations",
+      "question": "Jaká byla hodnota objednávek 2024 pro Novák Trade?",
+      "expected": {
+        "kind": "metric",
+        "count": 2,
+        "amountCzk": 47900,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-15",
+      "category": "metric",
+      "role": "operations",
+      "question": "Jaká byla hodnota objednávek 2024 pro Ateliér Novák?",
+      "expected": {
+        "kind": "metric",
+        "count": 2,
+        "amountCzk": 37200,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-16",
+      "category": "metric",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024 pro Studio Javor bez stornovaných?",
+      "expected": {
+        "kind": "metric",
+        "count": 4,
+        "amountCzk": 80700,
+        "sourceIds": [
+          "orders-2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-17",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo loni?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-18",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo v lednu 2024?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-19",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2025–2024?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-20",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo od 2024?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-21",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo do roku 2024?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-22",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo minulý týden?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-23",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Jaká byla průměrná hodnota objednávek 2024?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-24",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo pro Novák?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-25",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo pro Neexistující firma?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-26",
+      "category": "clarification",
+      "role": "operations",
+      "question": "Kolik objednávek bylo 2024–2099?",
+      "expected": {
+        "kind": "clarification"
+      }
+    },
+    {
+      "id": "CA-27",
+      "category": "denied",
+      "role": "people",
+      "question": "Kolik objednávek bylo 2024?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-28",
+      "category": "denied",
+      "role": "people",
+      "question": "Jaká je hodnota objednávek 2025?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-29",
+      "category": "denied",
+      "role": "people",
+      "question": "Kolik objednávek bylo pro Novák?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-30",
+      "category": "denied",
+      "role": "people",
+      "question": "Kolik objednávek bylo loni?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-31",
+      "category": "denied",
+      "role": "people",
+      "question": "Kolik stornovaných objednávek bylo 2024?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-32",
+      "category": "denied",
+      "role": "people",
+      "question": "Kolik objednávek bylo 2024 a 2025?",
+      "expected": {
+        "kind": "denied",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-33",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Kdo schvaluje nákup nad 80 000 Kč?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "purchase-policy",
+        "quote": "Vyšší částky vyžadují dvě schválení: ředitelku a vlastníka společnosti.",
+        "concepts": [
+          "reditelk",
+          "vlastnik"
+        ]
+      }
+    },
+    {
+      "id": "CA-34",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Do jaké částky může vedoucí provozu schválit nákup?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "purchase-policy",
+        "quote": "vedoucí provozu samostatně schválit nákup do 20 000 Kč včetně DPH.",
+        "concepts": [
+          "20 000",
+          "dph"
+        ]
+      }
+    },
+    {
+      "id": "CA-35",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Kdo schvaluje nákup od 20 001 Kč do 80 000 Kč?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "purchase-policy",
+        "quote": "Nákup od 20 001 Kč do 80 000 Kč schvaluje ředitelka.",
+        "concepts": [
+          "reditelk"
+        ]
+      }
+    },
+    {
+      "id": "CA-36",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Do kolika hodin dodavatel potvrdí servisní požadavek?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "supplier-sla",
+        "quote": "Dodavatel potvrdí přijetí servisního požadavku do 4 pracovních hodin.",
+        "concepts": [
+          "4",
+          "pracovn"
+        ]
+      }
+    },
+    {
+      "id": "CA-37",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Kdy se eskaluje kritická závada?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "supplier-sla",
+        "quote": "Kritická závada se eskaluje vedoucímu provozu po 8 pracovních hodinách bez řešení.",
+        "concepts": [
+          "8",
+          "pracovn"
+        ]
+      }
+    },
+    {
+      "id": "CA-38",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Kdy se odesílá náhradní zařízení?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "supplier-sla",
+        "quote": "Náhradní zařízení se odesílá nejpozději následující pracovní den po potvrzení závady.",
+        "concepts": [
+          "nasledujici",
+          "pracovni den"
+        ]
+      }
+    },
+    {
+      "id": "CA-39",
+      "category": "retrieval",
+      "role": "people",
+      "question": "Jak dlouho předem se žádá o dovolenou?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-leave",
+        "quote": "Zaměstnanec zadává žádost o dovolenou nejméně 10 pracovních dnů předem.",
+        "concepts": [
+          "10",
+          "pracovn"
+        ]
+      }
+    },
+    {
+      "id": "CA-40",
+      "category": "retrieval",
+      "role": "people",
+      "question": "Kdy se zhodnotí adaptační plán nového kolegy?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-onboarding",
+        "quote": "Po 30 dnech se společně zhodnotí adaptační plán.",
+        "concepts": [
+          "30"
+        ]
+      }
+    },
+    {
+      "id": "CA-41",
+      "category": "retrieval",
+      "role": "leadership",
+      "question": "Jaký je plán vedení na rok 2025?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "leadership-plan",
+        "quote": "plánuje sjednotit evidenci nákupů a zkrátit čas potřebný k dohledání podkladů.",
+        "concepts": [
+          "sjednotit",
+          "evidenc",
+          "zkratit"
+        ]
+      }
+    },
+    {
+      "id": "CA-42",
+      "category": "retrieval",
+      "role": "people",
+      "question": "Kdy nastoupila Klára Váchová?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-record",
+        "quote": "Nastoupila 15. ledna 2024 do týmu péče o lidi.",
+        "concepts": [
+          "15",
+          "2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-43",
+      "category": "retrieval",
+      "role": "operations",
+      "question": "Kde se ověřují nejasné údaje před rozhodnutím?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "shared-guide",
+        "quote": "Nejasné údaje se před rozhodnutím ověřují u vlastníka dokumentu.",
+        "concepts": [
+          "vlastnik"
+        ]
+      }
+    },
+    {
+      "id": "CA-44",
+      "category": "retrieval",
+      "role": "people",
+      "question": "Kdo potvrzuje zastupování při dovolené?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-leave",
+        "quote": "Vedoucí týmu potvrdí zastupování a personální tým eviduje schválený termín.",
+        "concepts": [
+          "vedouc"
+        ]
+      }
+    },
+    {
+      "id": "CA-45",
+      "category": "retrieval",
+      "role": "people",
+      "question": "Co se předává první den novému kolegovi?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-onboarding",
+        "quote": "V první den proběhne předání vybavení a přístupů.",
+        "concepts": [
+          "vybaven",
+          "pristup"
+        ]
+      }
+    },
+    {
+      "id": "CA-46",
+      "category": "retrieval",
+      "role": "leadership",
+      "question": "Kdy byl uzavřen adaptační plán Kláry?",
+      "expected": {
+        "kind": "sources",
+        "sourceId": "hr-record",
+        "quote": "Její adaptační plán byl uzavřen 15. února 2024.",
+        "concepts": [
+          "15",
+          "2024"
+        ]
+      }
+    },
+    {
+      "id": "CA-47",
+      "category": "not_found",
+      "role": "operations",
+      "question": "Kvantový teleport neutronů?",
+      "expected": {
+        "kind": "not_found",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-48",
+      "category": "not_found",
+      "role": "operations",
+      "question": "Xylofonový orbitální žirafometr?",
+      "expected": {
+        "kind": "not_found",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-49",
+      "category": "not_found",
+      "role": "operations",
+      "question": "Spektroskopie mezihvězdných mračen?",
+      "expected": {
+        "kind": "not_found",
+        "sourceIds": []
+      }
+    },
+    {
+      "id": "CA-50",
+      "category": "not_found",
+      "role": "operations",
+      "question": "Paleontologie trilobitů?",
+      "expected": {
+        "kind": "not_found",
+        "sourceIds": []
+      }
+    }
+  ]
+}

@@ -175,7 +175,7 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
     if re.search(r"\b(loni|letos|vcera|dnes|mesic|mesici|leden|lednu|unor|unoru|brezen|breznu|duben|dubnu|kveten|kvetnu|cerven|cervnu|cervenec|cervenci|srpen|srpnu|zari|rijen|rijnu|listopad|listopadu|prosinec|prosinci|ctvrtleti|kvartal)\b", text) or re.search(r"\b\d{1,2}[./]\d{1,2}", text):
         return {"kind":"clarification", "answer":"Zadejte prosím konkrétní celý rok nebo roky. Filtry po dnech, měsících ani relativní období zatím nepodporuji.", "sources":[]}
     years = sorted(set(re.findall(r"\b20\d{2}\b", text)))
-    if re.search(r"\b(prumer|nejvice|nejmene|minuly|minulem|tyden|tydnu)\b",text) or (len(years)==1 and re.search(r"\b(?:od|do)\s+(?:roku\s+)?20\d{2}\b",text)):
+    if re.search(r"\b(prumer\w*|median\w*|nejvice|nejmene|minuly|minulem|tyden|tydnu)\b",text) or (len(years)==1 and re.search(r"\b(?:od|do)\s+(?:roku\s+)?20\d{2}\b",text)):
         return {"kind":"clarification","answer":"Tento typ filtru zatím nepodporuji. Zadejte počet nebo hodnotu objednávek za konkrétní celé roky.","sources":[]}
     interval = re.search(r"\b(20\d{2})\s*(?:-|–|az)\s*(20\d{2})\b", text)
     if interval:
@@ -264,6 +264,8 @@ def answer_question(connection: sqlite3.Connection, role: str, question: str, ai
     if ai_answer is None:
         return {"kind": "sources", "answer": "Našel jsem související podklady. Pro souhrnnou odpověď je potřeba zapnuté AI.", "sources": sources}
     result = ai_answer(question, documents)
+    if result.get('supported') is not True:
+        return {"kind": "not_found", "answer": "V nalezených podkladech není požadovaný údaj. Související dokumenty lze otevřít a ověřit.", "sources": sources}
     evidence = result.get("evidence", [])
     by_id = {doc["id"]: doc for doc in documents}
     valid = isinstance(evidence, list) and 0 < len(evidence) <= 5 and all(

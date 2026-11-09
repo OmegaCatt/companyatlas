@@ -1,6 +1,14 @@
 # CompanyAtlas
 
-## Aktualizace 9. 11. 2026: Rozšířené datové filtry a seznam dokumentů
+## Druhá etapa 9. 11. 2026: ověřitelné odpovědi a boční náhled
+
+Dokumenty se otevírají vedle pracovní plochy s označenou citací. Na menší obrazovce má náhled vlastní plochu a ovládání klávesnicí; zavření vrací fokus. Přepnutí role vymaže i obsah náhledu a opoždilá odpověď jej neobnoví. Nepodporované průměry/mediány se vyjasní místo chybného součtu. AI výstup musí výslovně uvést, zda požadovaný údaj ve zdrojích je (`supported`); bez podkladu aplikace nevydá doloženou odpověď.
+
+18 automatických testů, 50 otázek offline a jeden nový živý běh 8/8. Nejde o obecnou míru přesnosti AI. První výsledek 6/8, opravy očekávání a chování i ruční posouzení citovaných odpovědí jsou v [EVALUATION.md](docs/EVALUATION.md). Live API běží pouze po `python evaluate.py --live`; CI nepoužívá klíč ani placené volání. Browser QA používá vypnuté AI a jednu výslovně simulovanou odpověď pouze ke kontrole zobrazení citace.
+
+English: side-by-side source preview, highlighted evidence, keyboard/mobile controls and stale-role cleanup. A versioned 50-case offline evaluation and a small 8-case live run have separate reports. Explicit AI support classification prevents unsupported results from being labelled grounded answers. These checks do not establish general accuracy; authentication and PDF/DOCX import remain unimplemented.
+
+## První etapa 9. 11. 2026: Rozšířené datové filtry a seznam dokumentů
 
 Dotazy podporují více výslovných let, vzestupné rozmezí do 21 let a filtr dokončených/stornovaných objednávek. Odpověď uvádí použitý rozsah a stav. Relativní období a dotazy po měsících/dnech žádají upřesnění. Kompaktní seznam souborů nahrazuje velké karty; otevřený AI zdroj zvýrazní citovaný text. Toto rozšíření nepřidává autentizaci ani import PDF/DOCX.
 
@@ -24,7 +32,7 @@ Fiktivní Severka Studio má 9 souborů a 15 objednávek. Dotaz „Kolik objedn�
 - **Přesné výpočty:** dotazy na počet a hodnotu objednávek zpracovávají parametrizované SQLite dotazy, nikoli odhad jazykového modelu.
 - **AI odpovědi nad texty:** server předá OpenAI pouze relevantní povolené dokumenty. AI musí vrátit doslovné citáty; server ověří jejich výskyt ve zdrojích a odmítne neplatné odkazy. Citát sám o sobě ještě nedokazuje správnost interpretace.
 - **Role:** provoz a nákup vidí objednávky, dodavatele a sdílené soubory; péče o lidi vidí personální a sdílené soubory; vedení vidí vše. Přístup se kontroluje na serveru před vyhledáváním i při otevření souboru.
-- **QA a audit:** osm kontrolních scénářů pro přesnost a přístupová pravidla, čtrnáct automatizovaných testů a protokol událostí bez ukládání textu dotazů.
+- **QA a audit:** osm kontrolních scénářů pro přesnost a přístupová pravidla, 18 automatizovaných testů a protokol událostí bez ukládání textu dotazů.
 - **Předání výsledku:** viditelnou odpověď lze stáhnout jako text se zdroji a započítanými řádky. Rozklikávací panel vysvětluje technologii, práci s API a hranice ukázkových rolí.
 
 ### Jak aplikaci vyzkoušet
@@ -51,9 +59,14 @@ Otevřete [http://127.0.0.1:4182](http://127.0.0.1:4182). Fiktivní data a přes
 
 ```powershell
 python -m unittest discover -s test -v
+python evaluate.py
 ```
 
 Při prvním spuštění se z `sample_data/` vytvoří místní SQLite databáze v ignorované složce `data/`. Pro opětovné načtení změněných ukázkových souborů lze při zastaveném serveru odstranit pouze vygenerovaný soubor `data/companyatlas.sqlite` a spustit server znovu.
+
+### Opakovatelné prohlížečové QA
+
+Node.js 24 a vývojové závislosti: `pnpm install --frozen-lockfile`, `pnpm exec playwright install chromium`, `pnpm qa`. Volitelně nastavte `ATLAS_PYTHON` a `PLAYWRIGHT_EXECUTABLE_PATH`. Běžná aplikace stále potřebuje jen Python standardní knihovnu; Node/Playwright slouží výhradně k vývoji a ověření. QA používá oddělenou dočasnou databázi a vypnuté AI.
 
 ### Důležité hranice
 
@@ -92,6 +105,7 @@ Python 3.13+; no third-party packages.
 ```sh
 python server.py
 python -m unittest discover -s test -v
+python evaluate.py
 ```
 
 Open [http://127.0.0.1:4182](http://127.0.0.1:4182). The sample and exact counts work without an API key. AI summaries require `OPENAI_API_KEY` in the process environment or an ignored local `.env.local` file based on `.env.example`. Never commit a real key.

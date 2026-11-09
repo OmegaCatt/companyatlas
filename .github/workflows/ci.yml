@@ -1,0 +1,36 @@
+name: Verify CompanyAtlas
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: python -m unittest discover -s test -v
+      - run: python evaluate.py --output data/evaluation-ci.json
+      - run: pnpm check
+      - run: pnpm qa
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: companyatlas-qa
+          path: |
+            docs/preview*.png
+            data/evaluation-ci.json
+          retention-days: 7

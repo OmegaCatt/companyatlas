@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ai import build_payload, parse_response
+from ai import AIUnavailable, build_payload, parse_response
 from core import (
     answer_order_count,
     answer_question,
@@ -17,6 +17,22 @@ from server import quality_checks
 
 
 class CoreTests(unittest.TestCase):
+    def test_explicit_unsupported_answer_is_not_a_grounded_document(self):
+        result=answer_question(self.connection,'people','Kolik dní dovolené má zaměstnanec?',lambda *_:{'supported':False,'answer':'Údaj chybí.','evidence':[{'source_id':'hr-leave','quote':'Zaměstnanec zadává žádost o dovolenou nejméně 10 pracovních dnů předem.'}]})
+        self.assertEqual(result['kind'],'not_found')
+        self.assertTrue(all('quote' not in source for source in result['sources']))
+        self.assertIn('supported',build_payload('Test',[])['text']['format']['schema']['required'])
+        for supported in [None,'false',1]:
+            with self.assertRaises(AIUnavailable):
+                import json
+                parse_response({'output':[{'content':[{'type':'output_text','text':json.dumps({'answer':'Test','evidence':[],'supported':supported})}]}]})
+    def test_unsupported_average_forms_never_return_a_sum(self):
+        for adjective in ['průměrná', 'průměrnou', 'průměr', 'medián', 'mediánová']:
+            with self.subTest(adjective=adjective):
+                result=answer_question(self.connection,'operations',f'Jaká byla {adjective} hodnota objednávek 2024?')
+                self.assertEqual(result['kind'],'clarification')
+                self.assertNotIn('amountCzk',result)
+
     def test_explicit_periods_statuses_and_unsupported_periods(self):
         cases=[
             ('Kolik objednávek bylo 2024 a 2025?',15),
@@ -83,7 +99,7 @@ class CoreTests(unittest.TestCase):
 
         def fake_ai(_question, documents):
             seen.extend(doc["id"] for doc in documents)
-            return {"answer": "Odpověď", "evidence": [{"source_id": "hr-record", "quote": "Fiktivní personální záznam"}]}
+            return {"supported": True, "answer": "Odpověď", "evidence": [{"source_id": "hr-record", "quote": "Fiktivní personální záznam"}]}
 
         result = answer_question(self.connection, "operations", "Kdo schvaluje nákup nad 80 000 Kč?", fake_ai)
         self.assertNotIn("hr-record", seen)
@@ -96,8 +112,8 @@ class CoreTests(unittest.TestCase):
 
     def test_ai_evidence_must_be_verbatim_in_authorized_document(self):
         question = "Kdo schvaluje nákup nad 80 000 Kč?"
-        good = lambda _question, _docs: {"answer": "Ředitelka a vlastník.", "evidence": [{"source_id": "purchase-policy", "quote": "Vyšší částky vyžadují dvě schválení: ředitelku a vlastníka společnosti."}]}
-        bad = lambda _question, _docs: {"answer": "Ředitelka a vlastník.", "evidence": [{"source_id": "purchase-policy", "quote": "Všichni mohou schvalovat bez limitu."}]}
+        good = lambda _question, _docs: {"supported": True, "answer": "Ředitelka a vlastník.", "evidence": [{"source_id": "purchase-policy", "quote": "Vyšší částky vyžadují dvě schválení: ředitelku a vlastníka společnosti."}]}
+        bad = lambda _question, _docs: {"supported": True, "answer": "Ředitelka a vlastník.", "evidence": [{"source_id": "purchase-policy", "quote": "Všichni mohou schvalovat bez limitu."}]}
         self.assertEqual(answer_question(self.connection, "operations", question, good)["kind"], "document")
         self.assertEqual(answer_question(self.connection, "operations", question, bad)["kind"], "not_found")
 
@@ -108,7 +124,7 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(payload["text"]["format"]["type"], "json_schema")
         self.assertIn("purchase-policy", payload["input"][0]["content"][0]["text"])
         self.assertNotIn("hr-record", payload["input"][0]["content"][0]["text"])
-        response = {"output": [{"content": [{"type": "output_text", "text": '{"answer":"Ano","evidence":[{"source_id":"purchase-policy","quote":"Nákup od 20 001 Kč"}]}'}]}]}
+        response = {"output": [{"content": [{"type": "output_text", "text": '{"supported":true,"answer":"Ano","evidence":[{"source_id":"purchase-policy","quote":"Nákup od 20 001 Kč"}]}'}]}]}
         self.assertEqual(parse_response(response)["evidence"][0]["source_id"], "purchase-policy")
 
     def test_quality_panel_checks_pass(self):
