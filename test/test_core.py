@@ -17,6 +17,28 @@ from server import quality_checks
 
 
 class CoreTests(unittest.TestCase):
+    def test_explicit_periods_statuses_and_unsupported_periods(self):
+        cases=[
+            ('Kolik objednávek bylo 2024 a 2025?',15),
+            ('Kolik objednávek bylo 2024–2025?',15),
+            ('Kolik dokončených objednávek bylo 2024?',11),
+            ('Kolik stornovaných objednávek bylo 2024?',1),
+            ('Kolik objednávek bylo 2024 bez stornovaných?',11),
+            ('Kolik objednávek bylo 2025?',3),
+            ('Kolik objednávek bylo 2023?',0),
+            ('Kolik objednávek bylo 2024 pro Studio Javor bez stornovaných?',4),
+            ('Kolik dokončených a stornovaných objednávek bylo 2024?',12),
+            ('Kolik objednávek bylo 2024 bez dokončených?',1),
+        ]
+        for question, expected in cases:
+            with self.subTest(question=question):
+                result=answer_question(self.connection,'operations',question)
+                self.assertEqual(result['count'],expected)
+                self.assertEqual(len(result['rows']),expected)
+        for question in ['Kolik objednávek bylo loni?','Kolik objednávek bylo v lednu 2024?','Kolik objednávek bylo 2025–2024?','Kolik objednávek bylo do roku 2024?','Kolik objednávek bylo od 2024?']:
+            self.assertEqual(answer_question(self.connection,'operations',question)['kind'],'clarification')
+        self.assertEqual(answer_question(self.connection,'people','Kolik objednávek bylo 2024 a 2025?')['kind'],'denied')
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.connection = connect(Path(self.temp.name) / "atlas.sqlite")

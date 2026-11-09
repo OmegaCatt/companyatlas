@@ -131,3 +131,5 @@ dialog::backdrop { background: #172531a8; }
 #download-answer{border:1px solid #cbd4da;background:#fff;color:#26313d;border-radius:5px;padding:8px 11px;cursor:pointer;font:inherit;font-size:11px}
 #download-answer:hover{background:#f2f5f6}
 @media(max-width:600px){.tech-details summary span{display:block;float:none;margin-top:3px}}
+/* Compact file list puts documents ahead of summary cards. */
+#file-grid{display:flex;flex-direction:column;gap:0;border:1px solid #dce2e8;border-radius:5px;overflow:hidden}#file-grid .file-card{display:flex;align-items:center;gap:15px;border:0;border-bottom:1px solid #e3e7eb;border-radius:0;min-height:74px;padding:12px 16px}#file-grid .file-card:last-child{border-bottom:0}#file-grid .file-body{flex:1;min-width:0}#file-grid .file-foot{margin:0;min-width:140px;gap:12px}#dialog-content mark{background:#fff0a9;color:#222;padding:2px} @media(max-width:650px){#file-grid .file-foot{display:none}}

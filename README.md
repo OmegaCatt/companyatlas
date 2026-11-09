@@ -1,5 +1,11 @@
 # CompanyAtlas
 
+## Aktualizace 9. 11. 2026: Rozšířené datové filtry a seznam dokumentů
+
+Dotazy podporují více výslovných let, vzestupné rozmezí do 21 let a filtr dokončených/stornovaných objednávek. Odpověď uvádí použitý rozsah a stav. Relativní období a dotazy po měsících/dnech žádají upřesnění. Kompaktní seznam souborů nahrazuje velké karty; otevřený AI zdroj zvýrazní citovaný text. Toto rozšíření nepřidává autentizaci ani import PDF/DOCX.
+
+English: explicit multi-year/range and order-status filters, clarification for unsupported periods, compact file list and highlighted quoted evidence. Demo roles remain passwordless.
+
 [Česky](#česky) · [English](#english)
 
 ## Česky

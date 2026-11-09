@@ -1,3 +1,7 @@
+# Etapa 9. 11. 2026
+
+15 automatických testů prošlo, nová kontrola obsahuje 16 datových podscénářů. Izolovaný browser QA server s vypnutým AI ověřil součet let 2024 a 2025, filtr stornovaných, upřesnění měsíčního dotazu, vymazání odpovědi po změně role, nepřístupnost seznamu objednávek pro personální roli a mobilní 390 px bez přetečení/JS chyb. Autentizace, PDF/DOCX a rozšířená sada textových AI evaluací zůstávají další etapou.
+
 # CompanyAtlas — project memory
 
 Updated 2026-10-30. Third portfolio application after DataDesk and OfferLens. The user requested a company-file explorer that answers natural-language questions, including exact order counts, while applying different access rights to departments.

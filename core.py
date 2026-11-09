@@ -164,14 +164,31 @@ def _customer_filter(question: str) -> str | None:
         return None
     candidate = re.sub(r"\s+(?:v|za)\s+roce\s+20\d{2}.*$", "", match.group(1)).strip()
     candidate = re.sub(r"\s+v\s+20\d{2}.*$", "", candidate).strip()
+    candidate = re.split(r"\s+(?:bez storn|jen dokonc|pouze dokonc|se stavem)", candidate)[0].strip()
     return candidate or None
 
 
 def answer_order_count(connection: sqlite3.Connection, role: str, question: str, mode: str = "count") -> dict:
     if "orders" not in allowed_groups(role):
         return {"kind": "denied", "answer": "K této oblasti dat nemáte přístup.", "sources": []}
-    year_match = re.search(r"\b20\d{2}\b", question)
-    year = year_match.group(0) if year_match else None
+    text = normalize(question)
+    if re.search(r"\b(loni|letos|vcera|dnes|mesic|mesici|leden|lednu|unor|unoru|brezen|breznu|duben|dubnu|kveten|kvetnu|cerven|cervnu|cervenec|cervenci|srpen|srpnu|zari|rijen|rijnu|listopad|listopadu|prosinec|prosinci|ctvrtleti|kvartal)\b", text) or re.search(r"\b\d{1,2}[./]\d{1,2}", text):
+        return {"kind":"clarification", "answer":"Zadejte prosím konkrétní celý rok nebo roky. Filtry po dnech, měsících ani relativní období zatím nepodporuji.", "sources":[]}
+    years = sorted(set(re.findall(r"\b20\d{2}\b", text)))
+    if re.search(r"\b(prumer|nejvice|nejmene|minuly|minulem|tyden|tydnu)\b",text) or (len(years)==1 and re.search(r"\b(?:od|do)\s+(?:roku\s+)?20\d{2}\b",text)):
+        return {"kind":"clarification","answer":"Tento typ filtru zatím nepodporuji. Zadejte počet nebo hodnotu objednávek za konkrétní celé roky.","sources":[]}
+    interval = re.search(r"\b(20\d{2})\s*(?:-|–|az)\s*(20\d{2})\b", text)
+    if interval:
+        first,last=map(int,interval.groups())
+        if first>last or last-first>20:
+            return {"kind":"clarification","answer":"Zadejte vzestupné rozmezí nejvýše 21 let.","sources":[]}
+        years = [str(y) for y in range(first,last+1)]
+    year = years[0] if len(years)==1 else None
+    status = None
+    if re.search(r"bez\s+storn|nestorn", text): status = 'dokoncena'
+    elif re.search(r"bez\s+dokonc", text): status = 'stornovana'
+    elif 'dokonc' in text and 'storn' not in text: status = 'dokoncena'
+    elif 'storn' in text and 'dokonc' not in text: status = 'stornovana'
     customer_fragment = _customer_filter(question)
     if customer_fragment:
         names = [row[0] for row in connection.execute("SELECT DISTINCT customer FROM orders") if customer_fragment in normalize(row[0])]
@@ -184,9 +201,12 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
         customer = None
     conditions = []
     parameters: list[str] = []
-    if year:
-        conditions.append("substr(placed_date, 1, 4) = ?")
-        parameters.append(year)
+    if years:
+        conditions.append("substr(placed_date, 1, 4) IN (" + ','.join('?' for _ in years) + ")")
+        parameters.extend(years)
+    if status:
+        conditions.append("status = ?")
+        parameters.append(status)
     if customer:
         conditions.append("customer = ?")
         parameters.append(customer)
@@ -204,7 +224,8 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
     completed = aggregate["completed"]
     cancelled = aggregate["cancelled"]
     amount = aggregate["amount"]
-    scope = f"v roce {year}" if year else "ve všech dostupných letech"
+    scope = ("v letech " + ', '.join(years)) if years else "ve všech dostupných letech"
+    if status: scope += " · stav " + status
     if customer:
         scope += f" pro zákazníka {customer}"
     source_ids = sorted({row["source_document_id"] for row in rows})
@@ -215,7 +236,7 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
     answer = (
         f"Celková hodnota objednávek {scope}: {amount:,} Kč. Započítané záznamy: {aggregate['total']}. Stornované: {cancelled} (evidovaná částka 0 Kč)."
         if mode == "amount" else
-        f"Počet objednávek {scope}: {aggregate['total']}. Dokončené: {completed}. Stornované: {cancelled}. Do celkového počtu zahrnuji i stornované objednávky."
+        f"Počet objednávek {scope}: {aggregate['total']}. Dokončené: {completed}. Stornované: {cancelled}. " + ("Započítán je pouze vybraný stav." if status else "Do celkového počtu zahrnuji i stornované objednávky.")
     ).replace(",", " ")
     return {
         "kind": "metric",
@@ -224,7 +245,7 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
         "amountCzk": amount,
         "completed": completed,
         "cancelled": cancelled,
-        "scope": {"year": year, "customer": customer},
+        "scope": {"year": year, "years": years, "status":status, "customer": customer},
         "sources": sources,
         "rows": rows,
         "method": "Přesný výběr a součet nad tabulkou orders v SQLite; rok podle data objednávky.",

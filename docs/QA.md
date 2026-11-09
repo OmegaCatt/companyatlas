@@ -1,3 +1,7 @@
+# Ověření 9. 11. 2026
+
+15 automatických testů prošlo, nová kontrola obsahuje 16 datových podscénářů. Izolovaný browser QA server s vypnutým AI ověřil součet let 2024 a 2025, filtr stornovaných, upřesnění měsíčního dotazu, vymazání odpovědi po změně role, nepřístupnost seznamu objednávek pro personální roli a mobilní 390 px bez přetečení/JS chyb. Autentizace, PDF/DOCX a rozšířená sada textových AI evaluací zůstávají další etapou.
+
 # Ověření CompanyAtlas
 
 ## Doplnění 31. 10. 2026: vysvětlení a předání odpovědi
