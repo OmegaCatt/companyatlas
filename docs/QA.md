@@ -1,3 +1,12 @@
+# Opakované ověření 10. 11. 2026
+
+**27 Python testů prošlo.** Znovu spuštěné prohlížečové QA ověřilo skutečný pracovní postup na dočasných fiktivních podkladech, desktop i mobil a JavaScript chyby. Navíc jeden nový skutečný AI dotaz nad fiktivním textem prošel (1/1) a offline sada 50/50. Je to aktuální smoke test, nikoli nová reprezentativní míra přesnosti.
+
+Ověřený předchozí commit 194d883: [GitHub Actions](https://github.com/OmegaCatt/companyatlas/actions/runs/42729784052); dostupnost jeho artefaktů byla ověřena. Aktuální revize dokumentace/oprav je kontrolována novým CI. Jeho přesný commit a výsledek jsou v hlavním Portfolio_PROGRESS.md. Staré věty o čekající publikaci v rozbaleném archivu platily jen pro dobu daného zápisu.
+
+<details>
+<summary>Historické výsledky, původní metriky a omezení</summary>
+
 # Závěrečná kontrola CA-1d / CA-2b/c
 
 27 Python testů a 50 offline případů prošlo. Složený zákazník před „v letech“, všechna rozmezí a další výslovné roky jsou zachované; od roku/do roku i odmítnutí nepodporované částky mají regresi. Dva širší živé běhy vyšly 17/17 a 17/17; zprávy jsou v evaluation-2026-11-10-full-1.json a full-2.json. Neshody ani chybné citace tyto dva běhy neukázaly. Viz EVALUATION.md pro ruční kontrolu a omezení.
@@ -68,3 +77,6 @@ Výběr role bez hesla znamená, že tato ukázka nemůže chránit skutečná d
 Čtrnáct serverových testů prošlo. Nový test ověřuje vyhledání slova pouze v obsahu dokumentu, zákaz hledání bez relace, filtr rolí a to, že výsledky obsahují pouze metadata. Vyhledávání čte povolené dokumenty jedním SQL dotazem. Prohlížeč ověřil personální výsledek, přepnutí na provozní roli, vymazání starého hledání a mobilní šířku bez vodorovného přetečení. Přepnutí role okamžitě skryje předchozí seznam souborů a zastaví rozpracované hledání.
 
 Místní orientační měření po změně: 1 000 sekvenčních vyhledání přibližně 391 ms (stejný malý fiktivní dataset). Srovnání se starším měřením 1 201 ms je orientační; nešlo o řízený výkonový experiment.
+
+
+</details>

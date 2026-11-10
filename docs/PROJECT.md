@@ -1,3 +1,12 @@
+# Aktuální rozsah a kontrola 10. 11. 2026
+
+Aktuální funkce, technologie, API, způsob použití, firemní zavedení a omezení jsou v [README](../README.md). Znovu prošlo 27 Python testů a odpovídající skutečný browser průchod desktop/mobil. Jde o fiktivní portfolio projekt. Výsledky a případné opravy jsou v [QA](QA.md).
+
+Předchozí ověřený kód 194d883: [úspěšné GitHub Actions](https://github.com/OmegaCatt/companyatlas/actions/runs/42729784052). Nový commit této revize má vlastní CI; aktuální stav je v hlavním protokolu portfolia. Níže uvedené historické plány nejsou seznam nehotových funkcí.
+
+<details>
+<summary>Historická projektová rozhodnutí a průběžné etapy</summary>
+
 # Závěrečná kontrola CA-1d / CA-2b/c
 
 27 Python testů a 50 offline případů prošlo. Složený zákazník před „v letech“, všechna rozmezí a další výslovné roky jsou zachované; od roku/do roku i odmítnutí nepodporované částky mají regresi. Dva širší živé běhy vyšly 17/17 a 17/17; zprávy jsou v evaluation-2026-11-10-full-1.json a full-2.json. Neshody ani chybné citace tyto dva běhy neukázaly. Viz EVALUATION.md pro ruční kontrolu a omezení.
@@ -51,3 +60,6 @@ The visual layer was simplified on 2026-10-30: a neutral document-workspace pale
 ## Next scope candidates
 
 Authenticated demo users, incremental indexing, PDF/DOCX import, more supported analytic intents, persistent cross-run evaluations, and a deployment with durable usage limits. None are implemented in V1.
+
+
+</details>
