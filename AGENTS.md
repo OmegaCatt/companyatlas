@@ -1,7 +1,9 @@
 # CompanyAtlas project notes
 
-Read `docs/PROJECT.md` and `docs/QA.md` before changing the app. Keep the sample company fictional and never commit `.env.local`, real credentials, personal records, or company files.
+Read the parent portfolio plan and docs/PROJECT.md and docs/QA.md. Use fictional data only; never commit env files or secrets.
 
-Preserve backend authorization before document retrieval, file content, counts, AI calls, and source citations. The passwordless role selector is only a demo and must never be described as production authentication. Keep exact order calculations in SQL and keep AI summaries limited to already-authorized source excerpts. Test cross-role leakage, stale browser state, and citation validation when modifying these flows.
+Backend authorization must precede retrieval, counts, file content and AI. Fixed-role local demo users use public demo passwords, not corporate SSO. Never describe them as protecting real data. Recheck identity after AI and source versions/hashes before returning citations. Deactivation invalidates all sessions of that identity. Client clearing must include previews and late requests.
 
-Update README and QA evidence when behavior or scope changes. Do not claim PDF/DOCX import, arbitrary SQL, real-company deployment, or general multi-turn chat until implemented and verified.
+Exact order calculations remain parameterized SQL. Imported PDF/DOCX text runs in a bounded subprocess; no OCR or original binary archive. Preserve source locators, version guards and atomic catalog revision updates. Do not allow document imports to overwrite prepared orders CSV.
+
+Run requirements-dev.txt installation, unittest, offline evaluate.py, pnpm check and browser QA for related changes. Update Czech-first README and actual QA evidence. Live AI and mock browser answers must be labelled separately.

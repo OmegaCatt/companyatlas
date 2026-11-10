@@ -6,6 +6,8 @@ import json
 import re
 import secrets
 import threading
+import auth
+import documents as document_store
 import time
 from contextlib import closing
 from datetime import datetime, timezone
@@ -55,7 +57,9 @@ class AppState:
         self.database_path = database_path
         self.api_key = api_key
         self.ai_transport = ai_transport
-        self.sessions: dict[str, tuple[str, float]] = {}
+        self.sessions = {}
+        self.login_attempts = []
+        self.import_slots = threading.BoundedSemaphore(2)
         self.lock = threading.Lock()
         self.ai_slots = threading.BoundedSemaphore(2)
         self.ai_window_start = time.monotonic()
@@ -63,22 +67,24 @@ class AppState:
         database_path.parent.mkdir(parents=True, exist_ok=True)
         with closing(connect(database_path)) as connection:
             init_database(connection)
+            auth.init(connection)
 
-    def create_session(self, role: str) -> str:
-        if role not in ROLE_GROUPS:
-            raise ValueError("Unknown role")
-        token = secrets.token_urlsafe(32)
+    def create_session(self, user):
+        token=secrets.token_urlsafe(32)
         with self.lock:
-            self.sessions[token] = (role, time.monotonic() + 3600)
+            self.sessions={key:value for key,value in self.sessions.items() if value[2]>time.monotonic()}
+            if len(self.sessions)>=1000:raise ValueError('Limit relací byl vyčerpán.')
+            self.sessions[token]=(user['username'],user['revision'],time.monotonic()+3600)
         return token
 
-    def session_role(self, token: str) -> str | None:
-        with self.lock:
-            value = self.sessions.get(token)
-            if value and value[1] > time.monotonic():
-                return value[0]
-            self.sessions.pop(token, None)
-        return None
+    def session_identity(self,token):
+        with self.lock:value=self.sessions.get(token)
+        if not value or value[2]<=time.monotonic():return None
+        with closing(connect(self.database_path)) as connection:return auth.identity(connection,value[0],value[1])
+
+    def session_role(self,token):
+        user=self.session_identity(token)
+        return user['role'] if user else None
 
     def answer_ai(self, question: str, documents: list[dict]) -> dict:
         if not self.api_key:
@@ -141,14 +147,14 @@ class AtlasHandler(BaseHTTPRequestHandler):
         self._headers(status, "application/json; charset=utf-8", len(body), extra)
         self.wfile.write(body)
 
-    def _read_json(self) -> dict:
+    def _read_json(self,limit=MAX_BODY) -> dict:
         if self.headers.get("Content-Type", "").split(";", 1)[0].lower() != "application/json":
             raise ValueError("Očekávám JSON požadavek.")
         try:
             length = int(self.headers.get("Content-Length", "-1"))
         except ValueError as error:
             raise ValueError("Neplatná délka požadavku.") from error
-        if length < 2 or length > MAX_BODY:
+        if length < 2 or length > limit:
             raise ValueError("Požadavek je příliš velký nebo prázdný.")
         self.connection.settimeout(10)
         try:
@@ -159,19 +165,22 @@ class AtlasHandler(BaseHTTPRequestHandler):
             raise ValueError("Očekávám JSON objekt.")
         return data
 
-    def _session_role(self) -> str | None:
+    def _session_token(self):
         cookie = SimpleCookie()
         try:
             cookie.load(self.headers.get("Cookie", ""))
         except Exception:
             return None
         token = cookie[COOKIE_NAME].value if COOKIE_NAME in cookie else ""
-        return self.state.session_role(token) if token else None
+        return token
+
+    def _session_role(self):
+        return self.state.session_role(self._session_token())
 
     def _require_role(self) -> str | None:
         role = self._session_role()
         if not role:
-            self._json(HTTPStatus.UNAUTHORIZED, {"error": "Vyberte ukázkovou roli."})
+            self._json(HTTPStatus.UNAUTHORIZED, {"error": "Přihlaste se ukázkovým účtem."})
         return role
 
     def _valid_host(self) -> bool:
@@ -194,8 +203,9 @@ class AtlasHandler(BaseHTTPRequestHandler):
             self._json(HTTPStatus.OK, {"ok": True, "aiConfigured": bool(self.state.api_key), "model": MODEL})
             return
         if path == "/api/session":
-            role = self._session_role()
-            self._json(HTTPStatus.OK, {"role": role, "name": ROLE_NAMES.get(role)})
+            user=self.state.session_identity(self._session_token())
+            with closing(connect(self.state.database_path)) as connection:version=document_store.revision(connection)
+            self._json(HTTPStatus.OK,{"role":user["role"] if user else None,"username":user["username"] if user else None,"catalogRevision":version})
             return
         if not path.startswith("/api/"):
             self._json(HTTPStatus.NOT_FOUND, {"error": "Nenalezeno."})
@@ -205,7 +215,7 @@ class AtlasHandler(BaseHTTPRequestHandler):
             return
         with closing(connect(self.state.database_path)) as connection:
             if path == "/api/overview":
-                self._json(HTTPStatus.OK, {"role": role, "name": ROLE_NAMES[role], "metrics": metrics(connection, role), "files": visible_documents(connection, role)})
+                self._json(HTTPStatus.OK, {"role": role, "name": ROLE_NAMES[role], "metrics": metrics(connection, role), "files": visible_documents(connection, role),"catalogRevision":document_store.revision(connection)})
             elif path == "/api/search":
                 query = parse_qs(urlsplit(self.path).query).get("q", [""])[0].strip()
                 if not 3 <= len(query) <= 100:
@@ -222,8 +232,13 @@ class AtlasHandler(BaseHTTPRequestHandler):
                 if not document:
                     self._json(HTTPStatus.NOT_FOUND, {"error": "Soubor nebyl nalezen."})
                     return
+                requested=parse_qs(urlsplit(self.path).query).get("version",[None])[0]
+                if requested is not None and requested!=str(document["version"]):
+                    self._json(409,{"error":"Verze dokumentu se změnila. Obnovte podklady."});return
                 audit(connection, role, "open_file", "allowed")
                 self._json(HTTPStatus.OK, document)
+            elif path == "/api/users" and role=="leadership":
+                self._json(200,{"users":[dict(row) for row in connection.execute("SELECT username,role,active FROM users ORDER BY username")]})
             elif path == "/api/evals":
                 if role != "leadership":
                     self._json(HTTPStatus.FORBIDDEN, {"error": "K této části nemáte přístup."})
@@ -251,20 +266,39 @@ class AtlasHandler(BaseHTTPRequestHandler):
             self._json(HTTPStatus.FORBIDDEN, {"error": "Cizí stránka nesmí volat místní API."})
             return
         try:
-            body = self._read_json()
+            body = self._read_json(2_800_000 if path=="/api/documents/import" and self._session_role()=="leadership" else MAX_BODY)
         except (ValueError, TimeoutError, OSError) as error:
             self._json(HTTPStatus.BAD_REQUEST, {"error": str(error) if isinstance(error, ValueError) else "Neplatný požadavek."})
             return
-        if path == "/api/login":
-            role = body.get("role")
-            if role not in ROLE_GROUPS:
-                self._json(HTTPStatus.BAD_REQUEST, {"error": "Neplatná ukázková role."})
-                return
-            token = self.state.create_session(role)
-            self._json(HTTPStatus.OK, {"role": role, "name": ROLE_NAMES[role]}, {"Set-Cookie": f"{COOKIE_NAME}={token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=3600"})
-            return
+        if path == '/api/logout':
+            with self.state.lock:self.state.sessions.pop(self._session_token(),None)
+            self._json(200,{'ok':True},{'Set-Cookie':f'{COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'});return
+        if path == '/api/login':
+            if not isinstance(body.get('username'),str) or not isinstance(body.get('password'),str):self._json(400,{'error':'Zadejte účet a heslo.'});return
+            with self.state.lock:
+                now=time.monotonic();self.state.login_attempts=[value for value in self.state.login_attempts if value>now-60]
+                if len(self.state.login_attempts)>=30:self._json(429,{'error':'Příliš mnoho pokusů. Zkuste později.'});return
+                self.state.login_attempts.append(now)
+            with closing(connect(self.state.database_path)) as connection:user=auth.authenticate(connection,body['username'],body['password'])
+            if not user:self._json(401,{'error':'Neplatné přihlášení nebo neaktivní účet.'});return
+            token=self.state.create_session(user)
+            self._json(200,{'role':user['role'],'username':user['username']},{'Set-Cookie':f'{COOKIE_NAME}={token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=3600'});return
         role = self._require_role()
         if not role:
+            return
+        if path in ['/api/documents/import','/api/documents/remove','/api/users/toggle']:
+            if role!='leadership':self._json(403,{'error':'Správa je povolená jen vedení.'});return
+            try:
+                with closing(connect(self.state.database_path)) as connection:
+                    if path=='/api/documents/import':
+                        if not self.state.import_slots.acquire(blocking=False):self._json(429,{'error':'Probíhají dvě čtení dokumentů.'});return
+                        try:result=document_store.import_document(connection,body)
+                        finally:self.state.import_slots.release()
+                    elif path=='/api/documents/remove':document_store.remove_document(connection,body.get('id'),body.get('expectedVersion'));result={'removed':True}
+                    else:auth.toggle(connection,body.get('username'),body.get('active'));result={'updated':True}
+                    audit(connection,role,'manage','done')
+                self._json(200,result)
+            except Exception as error:self._json(400,{'error':str(error) if isinstance(error,ValueError) else 'Čtení nebo změna dokumentu selhala.'})
             return
         if path != "/api/ask":
             self._json(HTTPStatus.NOT_FOUND, {"error": "Nenalezeno."})
@@ -277,6 +311,8 @@ class AtlasHandler(BaseHTTPRequestHandler):
             with closing(connect(self.state.database_path)) as connection:
                 result = answer_question(connection, role, question.strip(), self.state.answer_ai if self.state.api_key else None)
                 audit(connection, role, "ask", result["kind"])
+            if self._session_role()!=role:
+                self._json(401,{"error":"Oprávnění se změnila. Přihlaste se znovu."});return
             status = HTTPStatus.FORBIDDEN if result["kind"] == "denied" else HTTPStatus.OK
             self._json(status, result)
         except RateLimited as error:

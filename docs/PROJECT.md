@@ -1,3 +1,11 @@
+# Aktuální etapa 10. 11. 2026 – CA-4/5
+
+Pevné ukázkové účty, scrypt a odhlášení; deaktivace ruší relace i rozpracovanou odpověď. Vedení importuje textové PDF/DOCX/TXT/MD v omezeném procesu; lokátory, SHA-256, atomická verze/index a mazání. Staré odkazy vracejí konflikt, změna podkladu během AI ruší citace. Původní binární soubor ani úplný archiv verzí se neukládá. Veřejné demo heslo nechrání skutečná data. Aktuální limity a instalace jsou v README.
+
+Ověření: 25 Python testů včetně skutečného PDF/DOCX, pozdější strany v AI úryvku, české diakritiky, skenu bez textu, XML entit, verzí, mazání, rolí a odebrání identity během odpovědi. 50 offline případů. Browser QA prošlo: reálné přihlášení, PDF import, výměna za DOCX, smazání, filtrování, živé odpojení účtu přes druhou relaci, SQL, citace s výslovně simulovanou odpovědí, klávesnice a mobil bez přetečení/JS chyb. Nové živé AI volání neproběhlo. Vizuálně zkontrolovaný snímek správy je management.png. CI této změny zatím čeká na publikaci.
+
+## Historické záznamy (nepopisují aktuální rozsah)
+
 # Druhá etapa 9. 11. 2026 – CA-1a/b/c, CA-2a a CA-3a
 
 18 automatických testů prošlo. Samostatná offline evaluace 50/50 má 16 metrik, 10 upřesnění, 6 odmítnutí přístupu, 14 vyhledání textových zdrojů a 4 dotazy bez podkladu. Živý běh před úpravou vykázal 6/8; po explicitním `supported` a opravě příliš přísného očekávání u časové otázky nový běh 8/8. Odpovědi byly posouzeny vůči zdrojům; podrobnosti, oba reporty a hranice jsou v EVALUATION.md. Nejde o obecnou přesnost ani úplné ověření prompt injection.

@@ -41,7 +41,7 @@ class ServerTests(unittest.TestCase):
             return error.code, json.load(error), error.headers
 
     def login(self, role):
-        status, result, headers = self.request("/api/login", method="POST", body={"role": role})
+        status, result, headers = self.request("/api/login", method="POST", body={"username":role,"password":"AtlasDemo-2026"})
         self.assertEqual(status, 200)
         self.assertEqual(result["role"], role)
         return headers["Set-Cookie"].split(";", 1)[0]

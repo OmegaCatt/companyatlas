@@ -1,4 +1,4 @@
-import {spawn} from 'node:child_process';
+import {spawn,execFileSync} from 'node:child_process';
 import {once} from 'node:events';
 import {mkdtemp,rm,mkdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
@@ -24,7 +24,8 @@ try{
   browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});
   const p=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
   p.on('pageerror',error=>errors.push(error.message));
-  await p.goto(`http://127.0.0.1:${port}`);
+  const login=async(account,initial=false)=>{if(!initial)await p.locator('#role-select').selectOption(account);await p.locator('#login-dialog').waitFor({state:'visible'});await p.locator('#login-account').selectOption(account);await p.locator('#login-password').fill('AtlasDemo-2026');await p.locator('#login-submit').click();await p.locator('#login-dialog').waitFor({state:'hidden'});};
+  await p.goto('http://127.0.0.1:'+port);await login('operations',true);
   await p.waitForFunction(()=>document.querySelector('#stat-docs').textContent==='5');
   const ask=async(question,pattern)=>{
     await p.locator('#question').fill(question);await p.locator('#ask-button').click();
@@ -56,7 +57,7 @@ try{
   const gate=new Promise(resolve=>release=resolve),ready=new Promise(resolve=>arrived=resolve);
   await p.route('**/api/files/purchase-policy',async route=>{const response=await route.fetch();arrived();await gate;await route.fulfill({response})});
   await p.locator('#file-grid button').filter({hasText:'Pravidla schvalování nákupu'}).click();await ready;
-  await p.locator('#role-select').selectOption('people');
+  await login('people');
   await p.waitForFunction(()=>document.querySelector('#stat-docs').textContent==='4');
   const delivered=p.waitForResponse(r=>r.url().includes('/api/files/purchase-policy'));release();await delivered;
   await p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -78,8 +79,24 @@ try{
   await p.screenshot({path:path.join(root,'docs','preview-mobile.png')});
   await p.locator('#dialog-close').click();
   assert.equal(await p.locator('.app-shell').evaluate(node=>node.inert),false);
+  // Document lifecycle and account revocation use the real HTTP API and parser.
+  execFileSync(process.env.ATLAS_PYTHON||'python',['test/make_fixtures.py',temp],{cwd:root,windowsHide:true});
+  await login('leadership');await p.waitForFunction(()=>document.querySelector('#stat-docs').textContent==='9');
+  await p.locator('#manage-panel summary').click();
+  async function upload(name,title,group){await p.locator('#import-title').fill(title);await p.locator('#import-group').selectOption(group);await p.locator('#document-file').setInputFiles(path.join(temp,name));await p.locator('#document-submit').click();await p.waitForFunction(()=>document.querySelector('#document-status').textContent.includes('Index připraven'));}
+  await upload('demo.pdf','Fiktivní servisní PDF','operations');
+  await p.locator('#file-grid button').filter({hasText:'Fiktivní servisní PDF'}).click();await p.locator('#document-meta').filter({hasText:'Verze 1'}).waitFor();assert.match(await p.locator('#dialog-content').innerText(),/Strana 1/);
+  await p.locator('#replace-document').click();await upload('demo.docx','Fiktivní servisní PDF','operations');
+  await p.locator('#file-grid button').filter({hasText:'Fiktivní servisní PDF'}).click();await p.locator('#document-meta').filter({hasText:'Verze 2'}).waitFor();assert.match(await p.locator('#dialog-content').innerText(),/Odstavec 1/);
+  p.once('dialog',dialog=>dialog.accept());await p.locator('#remove-document').click();await p.waitForFunction(()=>!document.querySelector('#file-grid').textContent.includes('Fiktivní servisní PDF'));
+  await upload('demo.docx','Fiktivní personální DOCX','people');
+  await login('operations');await p.waitForFunction(()=>document.querySelector('#stat-docs').textContent==='5');assert.ok(!(await p.locator('#file-grid').innerText()).includes('Fiktivní personální DOCX'));
+  const owner=await browser.newPage();await owner.goto('http://127.0.0.1:'+port);await owner.locator('#login-dialog').waitFor({state:'visible'});await owner.locator('#login-account').selectOption('leadership');await owner.locator('#login-password').fill('AtlasDemo-2026');await owner.locator('#login-submit').click();await owner.locator('#login-dialog').waitFor({state:'hidden'});await owner.locator('#manage-panel summary').click();
+  await owner.locator('.user-row').filter({hasText:'operations'}).getByRole('button',{name:'Deaktivovat',exact:true}).click();
+  await p.locator('#login-dialog').waitFor({state:'visible',timeout:15000});assert.equal(await p.locator('#file-grid button').count(),0);assert.equal(await p.locator('#dialog-content').innerText(),'');
+  await owner.screenshot({path:path.join(root,'docs','management.png')});await owner.close();
   assert.deepEqual(errors,[]);
-  console.log('PASS: SQL, average clarification, nonmodal preview, mocked quote highlight, keyboard focus, stale preview after role change, denied orders, desktop/mobile, no JS errors; AI disabled');
+  console.log('PASS: SQL, average clarification, nonmodal preview, mocked quote highlight, keyboard focus, stale preview after role change, denied orders, desktop/mobile, no JS errors; AI disabled; real login, PDF/DOCX import, version replacement/deletion, role filtering and live session revocation');
 }finally{
   await browser?.close();if(child.exitCode===null){child.kill();await once(child,'exit')}
   const resolved=path.resolve(temp);if(!resolved.startsWith(path.resolve(tmpdir())+path.sep))throw Error('Unsafe cleanup path');

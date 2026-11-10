@@ -41,7 +41,21 @@ def read_api_key(root: Path) -> str:
 
 
 def build_payload(question: str, documents: list[dict], model: str = MODEL) -> dict:
-    allowed = [{"id": doc["id"], "title": doc["title"], "content": doc["content"][:2600]} for doc in documents[:3]]
+    # Rank imported page/paragraph excerpts so a later page is not silently omitted.
+    import re,unicodedata
+    def normalized(text):return ''.join(c for c in unicodedata.normalize('NFD',text.lower()) if unicodedata.category(c)!='Mn')
+    tokens=set(re.findall(r'[a-z0-9]{4,}',normalized(question)))
+    def excerpt(doc):
+        sections=doc.get('locators',[])
+        if not sections:return doc['content'][:2600]
+        ranked=sorted(sections,key=lambda part:-sum(token in normalized(doc['content'][part['start']:part['end']]) for token in tokens))[:2]
+        chunks=[]
+        for part in ranked:
+            text=doc['content'][part['start']:part['end']];norm=normalized(text)
+            start=min([norm.find(token) for token in tokens if token in norm] or [0]);start=max(0,start-300)
+            chunks.append(text[start:start+1300])
+        return '\n\n'.join(chunks)
+    allowed = [{"id": doc["id"], "title": doc["title"], "content": excerpt(doc)} for doc in documents[:3]]
     return {
         "model": model,
         "store": False,

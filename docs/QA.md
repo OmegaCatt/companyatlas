@@ -1,3 +1,11 @@
+# Aktuální etapa 10. 11. 2026 – CA-4/5
+
+Pevné ukázkové účty, scrypt a odhlášení; deaktivace ruší relace i rozpracovanou odpověď. Vedení importuje textové PDF/DOCX/TXT/MD v omezeném procesu; lokátory, SHA-256, atomická verze/index a mazání. Staré odkazy vracejí konflikt, změna podkladu během AI ruší citace. Původní binární soubor ani úplný archiv verzí se neukládá. Veřejné demo heslo nechrání skutečná data. Aktuální limity a instalace jsou v README.
+
+Ověření: 25 Python testů včetně skutečného PDF/DOCX, pozdější strany v AI úryvku, české diakritiky, skenu bez textu, XML entit, verzí, mazání, rolí a odebrání identity během odpovědi. 50 offline případů. Browser QA prošlo: reálné přihlášení, PDF import, výměna za DOCX, smazání, filtrování, živé odpojení účtu přes druhou relaci, SQL, citace s výslovně simulovanou odpovědí, klávesnice a mobil bez přetečení/JS chyb. Nové živé AI volání neproběhlo. Vizuálně zkontrolovaný snímek správy je management.png. CI této změny zatím čeká na publikaci.
+
+## Historické záznamy (nepopisují aktuální rozsah)
+
 ## Ověřený vzdálený běh
 
 GitHub Actions úspěšně ověřily kód `e267526`: [výsledek kontroly](https://github.com/OmegaCatt/companyatlas/actions/runs/42685515544). Výsledek se vztahuje k uvedenému commitu; změny pouze dokumentace nepřidávají nové funkce.

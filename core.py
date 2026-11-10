@@ -7,6 +7,7 @@ import json
 import re
 import sqlite3
 import unicodedata
+import documents as document_store
 from pathlib import Path
 
 
@@ -62,6 +63,7 @@ def init_database(connection: sqlite3.Connection) -> None:
             result TEXT NOT NULL
         );
     """)
+    document_store.init(connection)
     if connection.execute("SELECT COUNT(*) FROM documents").fetchone()[0]:
         return
     manifest = json.loads((SAMPLE_ROOT / "manifest.json").read_text(encoding="utf-8"))
@@ -113,7 +115,7 @@ def get_document(connection: sqlite3.Connection, role: str, document_id: str) ->
         f"SELECT id, path, title, group_name, kind, description, content FROM documents WHERE id = ? AND group_name IN ({placeholders})",
         (document_id, *groups),
     ).fetchone()
-    return dict(row) if row else None
+    return document_store.decorate(connection,dict(row)) if row else None
 
 
 def normalize(value: str) -> str:
@@ -257,13 +259,17 @@ def answer_question(connection: sqlite3.Connection, role: str, question: str, ai
     intent = order_intent(question)
     if intent:
         return answer_order_count(connection, role, question, intent)
-    documents = search_documents(connection, role, question)
+    documents = [dict(get_document(connection,role,doc["id"]),score=doc["score"]) for doc in search_documents(connection, role, question)]
     if not documents:
         return {"kind": "not_found", "answer": "V souborech, ke kterým máte přístup, jsem nenašel podklad pro spolehlivou odpověď.", "sources": []}
-    sources = [{"id": doc["id"], "title": doc["title"]} for doc in documents]
+    sources = [{"id": doc["id"], "title": doc["title"], "version":doc["version"]} for doc in documents]
     if ai_answer is None:
         return {"kind": "sources", "answer": "Našel jsem související podklady. Pro souhrnnou odpověď je potřeba zapnuté AI.", "sources": sources}
     result = ai_answer(question, documents)
+    for document in documents:
+        current=get_document(connection,role,document["id"])
+        if not current or current["version"]!=document["version"] or current["sha256"]!=document["sha256"]:
+            return {"kind":"not_found","answer":"Podklady se mezitím změnily nebo byly odebrány. Položte dotaz znovu.","sources":[]}
     if result.get('supported') is not True:
         return {"kind": "not_found", "answer": "V nalezených podkladech není požadovaný údaj. Související dokumenty lze otevřít a ověřit.", "sources": sources}
     evidence = result.get("evidence", [])
@@ -279,7 +285,7 @@ def answer_question(connection: sqlite3.Connection, role: str, question: str, ai
     )
     if not valid or not isinstance(result.get("answer"), str) or not result["answer"].strip():
         return {"kind": "not_found", "answer": "Z nalezených podkladů se nepodařilo sestavit doloženou odpověď.", "sources": sources}
-    selected = [{"id": item["source_id"], "title": by_id[item["source_id"]]["title"], "quote": item["quote"]} for item in evidence]
+    selected = [{"id": item["source_id"], "title": by_id[item["source_id"]]["title"], "quote": item["quote"],"version":by_id[item["source_id"]]["version"],"locator":document_store.locator(by_id[item["source_id"]],item["quote"])} for item in evidence]
     return {"kind": "document", "answer": result["answer"].strip()[:3000], "sources": selected, "method": "AI shrnula pouze povolené dokumenty. Doslovné citáty systém ověřil proti zdrojům; jejich význam musí zkontrolovat člověk."}
 
 

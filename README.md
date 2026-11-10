@@ -1,117 +1,62 @@
 # CompanyAtlas
 
-## Druhá etapa 9. 11. 2026: ověřitelné odpovědi a boční náhled
+**Průzkumník fiktivních firemních souborů: přesné SQL odpovědi, AI souhrny s citacemi a přístup podle přihlášeného účtu.**
 
-Dokumenty se otevírají vedle pracovní plochy s označenou citací. Na menší obrazovce má náhled vlastní plochu a ovládání klávesnicí; zavření vrací fokus. Přepnutí role vymaže i obsah náhledu a opoždilá odpověď jej neobnoví. Nepodporované průměry/mediány se vyjasní místo chybného součtu. AI výstup musí výslovně uvést, zda požadovaný údaj ve zdrojích je (`supported`); bez podkladu aplikace nevydá doloženou odpověď.
+![Pracovní rozhraní](docs/preview.png)
 
-18 automatických testů, 50 otázek offline a jeden nový živý běh 8/8. Nejde o obecnou míru přesnosti AI. První výsledek 6/8, opravy očekávání a chování i ruční posouzení citovaných odpovědí jsou v [EVALUATION.md](docs/EVALUATION.md). Live API běží pouze po `python evaluate.py --live`; CI nepoužívá klíč ani placené volání. Browser QA používá vypnuté AI a jednu výslovně simulovanou odpověď pouze ke kontrole zobrazení citace.
+## Co řeší
 
-English: side-by-side source preview, highlighted evidence, keyboard/mobile controls and stale-role cleanup. A versioned 50-case offline evaluation and a small 8-case live run have separate reports. Explicit AI support classification prevents unsupported results from being labelled grounded answers. These checks do not establish general accuracy; authentication and PDF/DOCX import remain unimplemented.
+Provoz potřebuje spočítat objednávky a dohledat nákupní postup. Personální oddělení potřebuje vlastní dokumenty. Aplikace odděluje přístup na serveru a u odpovědi ukazuje podklad. Fiktivní Severka Studio má ve výchozí sadě 9 souborů a 15 objednávek. Dotaz na rok 2024 vrátí 12 objednávek včetně jedné stornované; Studio Javor má 5. Nejednoznačné jméno vyžaduje upřesnění.
 
-## První etapa 9. 11. 2026: Rozšířené datové filtry a seznam dokumentů
+## Používání
 
-Dotazy podporují více výslovných let, vzestupné rozmezí do 21 let a filtr dokončených/stornovaných objednávek. Odpověď uvádí použitý rozsah a stav. Relativní období a dotazy po měsících/dnech žádají upřesnění. Kompaktní seznam souborů nahrazuje velké karty; otevřený AI zdroj zvýrazní citovaný text. Toto rozšíření nepřidává autentizaci ani import PDF/DOCX.
+1. Přihlaste se účtem operations, people nebo leadership. **Veřejné demonstrační heslo všech tří: AtlasDemo-2026. Pouze fiktivní data.** Účet má pevnou roli, klient si nepřiděluje oprávnění.
+2. Procházejte složky nebo hledejte v názvech a obsahu. Otevřete boční náhled a položte otázku. Počty a hodnoty objednávek počítá parametrizované SQL; AI je nesčítá. Průměry, mediány a nepodporované časové dotazy vyžadují upřesnění.
+3. Textové odpovědi používají volitelně OpenAI Responses API. Odesílají se nejvýše tři již povolené úryvky. Server kontroluje doslovné citace a verzi zdroje po návratu odpovědi. Výskyt citátu sám nepotvrzuje správnost interpretace.
+4. Vedení může ve správě nahrát textové PDF, DOCX, TXT nebo MD; zvolit oblast, nahradit aktuální verzi a dokument odebrat. Strany/odstavce se zobrazují u citace. Verze brání otevření starého zdroje; aplikace **neuchovává úplný archiv starších verzí**.
+5. Vedení může deaktivovat jiný ukázkový účet. Server okamžitě odmítne jeho relace. Otevřený prohlížeč při další kontrole (každých 5 sekund a při návratu do okna) vymaže obsah. Již stažené kopie odebrat nelze.
 
-English: explicit multi-year/range and order-status filters, clarification for unsupported periods, compact file list and highlighted quoted evidence. Demo roles remain passwordless.
+Provoz vidí objednávky, dodavatele a sdílené dokumenty. People vidí personální a sdílené soubory. Vedení vidí vše. Přepnutí účtu vyžaduje nové přihlášení a odstraní předchozí pracovní obsah. Odpověď lze stáhnout včetně zdrojů.
 
-[Česky](#česky) · [English](#english)
+## Technologie a datový tok
 
-## Česky
+Python 3.13+, SQLite, standardní HTTP server, HTML/CSS/JavaScript. Text PDF čte **pypdf 6.21.4**; DOCX se čte přes omezený ZIP a XML standardní knihovny. Samostatný proces má časový limit 15 sekund a nepřebírá proměnnou OPENAI_API_KEY. Ukládá se jen textový index, lokátory, verze a SHA-256; původní binární příloha se neukládá. Při změně dokumentu se v jediné transakci aktualizuje index a revize katalogu. Klient změnu zachytí při další kontrole a odstraní staré podklady.
 
-**Průzkumník fiktivních firemních souborů s přesnými datovými odpověďmi, AI souhrny a přístupem podle role.** CompanyAtlas ukazuje, jak bezpečně propojit vyhledávání v dokumentech s výpočtem nad tabulkou objednávek. Výsledek vždy odkazuje na zdrojový soubor; u objednávek také na konkrétní řádky.
+Limity: 2 MB vstup, 30 importovaných dokumentů, 50 stran PDF, 100 000 znaků / 2 000 fragmentů; DOCX nejvýše 256 ZIP položek a 8 MB deklarovaného rozbalení. PDF má i omezení dekódování, stromu stran a objektů podle [pypdf Configuration](https://pypdf.readthedocs.io/en/6.21.4/modules/configuration.html). Sken bez textu vyžaduje OCR a je odmítnut. Texty ani odkazy ze souborů se nespouštějí. Připravená datová CSV objednávek nelze přepisovat dokumentovým importem.
 
-![Přehled CompanyAtlas](docs/preview.png)
+Místní identity mají scrypt hashe se solí; relace mají hodinovou platnost a kontrolu aktivního účtu. Přihlašování je procesově omezené. AI má dvě souběžná a 20 volání za 24 hodin v rámci procesu, store:false. Audit neukládá text otázek. Není implementováno SSO, synchronizace ACL, OCR, univerzální SQL ani paměť více navazujících dotazů. Hledání je slovní, nikoli vektorové.
 
-### Ukázkový scénář
-
-Fiktivní Severka Studio má 9 souborů a 15 objednávek. Dotaz „Kolik objednávek bylo v roce 2024?“ vrátí **12**, z toho 11 dokončených a 1 stornovanou. Dotaz na Studio Javor vrátí **5**, z toho 4 dokončené a 1 stornovanou. Stornované objednávky jsou v celkovém počtu výslovně zahrnuté. „Novák“ odpovídá dvěma zákazníkům, proto aplikace žádá o upřesnění.
-
-### Co aplikace předvádí
-
-- **Průzkumník souborů:** složky, hledání v názvech i obsahu a otevření zdrojového CSV nebo textového dokumentu. Server filtruje výsledky podle aktuální role ještě před hledáním a vrací pouze metadata.
-- **Přesné výpočty:** dotazy na počet a hodnotu objednávek zpracovávají parametrizované SQLite dotazy, nikoli odhad jazykového modelu.
-- **AI odpovědi nad texty:** server předá OpenAI pouze relevantní povolené dokumenty. AI musí vrátit doslovné citáty; server ověří jejich výskyt ve zdrojích a odmítne neplatné odkazy. Citát sám o sobě ještě nedokazuje správnost interpretace.
-- **Role:** provoz a nákup vidí objednávky, dodavatele a sdílené soubory; péče o lidi vidí personální a sdílené soubory; vedení vidí vše. Přístup se kontroluje na serveru před vyhledáváním i při otevření souboru.
-- **QA a audit:** osm kontrolních scénářů pro přesnost a přístupová pravidla, 18 automatizovaných testů a protokol událostí bez ukládání textu dotazů.
-- **Předání výsledku:** viditelnou odpověď lze stáhnout jako text se zdroji a započítanými řádky. Rozklikávací panel vysvětluje technologii, práci s API a hranice ukázkových rolí.
-
-### Jak aplikaci vyzkoušet
-
-Zvolte ukázkovou roli a procházejte dostupné složky. Otevřete zdrojový soubor nebo vyhledejte výraz v názvech a obsahu. Pak položte dotaz na počet či hodnotu objednávek a porovnejte výsledek s uvedenými řádky CSV. Dotaz nad textovými dokumenty může vytvořit AI souhrn, pokud je místně nastaven API klíč. Přepnutím role lze vidět, které soubory a výsledky server pro demo roli zpřístupní. Volba role zde **není přihlášení**.
-
-### Použitá architektura a další možnosti
-
-Použito je **Python 3.13 standard library, SQLite, HTTP server, HTML/CSS/JavaScript a OpenAI Responses API** pro volitelné textové souhrny. Import připravených CSV/Markdown souborů vytvoří místní index; dotazy na čísla používají parametrizované SQL a textové odpovědi pouze dokumenty povolené vybrané roli. Přesné citace jsou kontrolované proti zdroji, ale jejich význam musí posoudit člověk. Indexace PDF/DOCX, konektory na firemní úložiště, skutečné identity a pokročilé hledání jsou možné další kroky, nikoli součást této verze.
-
-### Cesta k firemnímu nasazení
-
-Začít by se mělo na schválených testovacích dokumentech s přesně stanoveným vlastníkem a pravidly přístupu. Před zapojením reálných dat je zásadní nahradit volný výběr role firemním přihlášením, přebírat oprávnění ze zdrojových systémů a ověřit, že nedochází k úniku přes hledání, odpověď ani citace. Následně by bylo potřeba řídit životní cyklus indexu, mazání, audit, limity API a pravidla pro předávání textu externímu poskytovateli AI. Současná ukázka je určena jen pro fiktivní data na místním počítači.
-
-### Spuštění
-
-Vyžaduje Python 3.13 nebo novější; aplikace používá pouze standardní knihovnu. Na Windows:
+## Spuštění a ověření
 
 ```powershell
+python -m pip install -r requirements.txt
 python server.py
 ```
 
-Otevřete [http://127.0.0.1:4182](http://127.0.0.1:4182). Fiktivní data a přesné výpočty fungují bez API klíče. Pro AI souhrny vytvořte ignorovaný `.env.local` podle `.env.example` s `OPENAI_API_KEY`, nebo nastavte proměnnou v prostředí procesu. Klíč čte pouze místní server a **nepatří na GitHub**.
+Otevřete [127.0.0.1:4182](http://127.0.0.1:4182). Připravená data, import a SQL fungují bez API. Pro textové AI odpovědi nastavte klíč pouze do prostředí serveru nebo ignorovaného souboru .env.local podle .env.example. **Klíč nepatří na GitHub.** První spuštění vytvoří databázi v ignorované složce data; existující databáze získá nové tabulky bez smazání připravených dat.
 
 ```powershell
+python -m pip install -r requirements-dev.txt
 python -m unittest discover -s test -v
 python evaluate.py
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm check
+pnpm qa
 ```
 
-Při prvním spuštění se z `sample_data/` vytvoří místní SQLite databáze v ignorované složce `data/`. Pro opětovné načtení změněných ukázkových souborů lze při zastaveném serveru odstranit pouze vygenerovaný soubor `data/companyatlas.sqlite` a spustit server znovu.
+Node 24 / Playwright slouží pro vývoj; volitelně ATLAS_PYTHON a PLAYWRIGHT_EXECUTABLE_PATH. QA používá dočasnou databázi, fiktivní PDF/DOCX a vypnuté API. Vývojová závislost ReportLab vytváří testovací PDF.
 
-### Opakovatelné prohlížečové QA
+**25 automatických testů**, 50 offline evaluačních případů (zahrnutých i v jednom testu), browser QA přihlášení, importu, výměny/mazání, oprávnění, deaktivace a mobilu. Dřívější malý živý běh 8/8 a první výsledek 6/8 jsou odděleně doložené v [evaluaci](docs/EVALUATION.md). V této etapě nebyla měřena živá kvalita AI nad importy. Viz [QA](docs/QA.md).
 
-Node.js 24 a vývojové závislosti: `pnpm install --frozen-lockfile`, `pnpm exec playwright install chromium`, `pnpm qa`. Volitelně nastavte `ATLAS_PYTHON` a `PLAYWRIGHT_EXECUTABLE_PATH`. Běžná aplikace stále potřebuje jen Python standardní knihovnu; Node/Playwright slouží výhradně k vývoji a ověření. QA používá oddělenou dočasnou databázi a vypnuté AI.
+## Jak zavádět do firmy
 
-### Důležité hranice
-
-Účty jsou **demonstrace rolí bez hesla**: každý návštěvník si může vybrat všechny role. Projekt proto nesmí dostat skutečné firemní dokumenty ani být veřejně vystaven jako zabezpečený interní systém. Místní server naslouchá jen na `127.0.0.1`; pro reálné nasazení by bylo nutné přidat autentizaci, skutečné identity a oprávnění ze zdrojových systémů.
-
-První verze indexuje připravené CSV a Markdown soubory. Nepřijímá nahrané soubory, PDF ani DOCX, neumí obecné SQL dotazy a nepamatuje si návaznost mezi dotazy. Textové odpovědi jsou omezené na dostupné podklady a mohou obsahovat chybnou interpretaci; důležité závěry je nutné ověřit ve zdrojích. Při AI dotazu se vybrané fiktivní úryvky odešlou OpenAI API. Požadavek používá `store: false`; server omezuje AI na dvě souběžná a 20 volání za 24 hodin v rámci běžícího procesu.
-
-Podrobné výsledky jsou v [ověření](docs/QA.md) a [zadání projektu](docs/PROJECT.md).
+Nejprve vybrat schválenou sadu podkladů, vlastníky a přesné otázky; rozhodnout, která data smí externímu poskytovateli. Další etapa by přidala firemní SSO a ACL ze zdrojových úložišť, HTTPS a produkční server, trvalé limity a monitoring, ochranu parseru v izolovaném prostředí, zálohy, retenční pravidla a větší opakované věcné evaluace. Veřejná demo hesla **nechrání reálné firemní dokumenty**. Tato aplikace naslouchá jen na loopbacku a je portfoliovou ukázkou, nikoli provozním interním systémem.
 
 ## English
 
-**A fictional company file explorer with exact data answers, AI-assisted document summaries, and role-based access.** CompanyAtlas combines source-aware document search with deterministic calculations over an orders table. Answers link back to source files and, for order counts, exact CSV rows.
+A fictional company file explorer with exact SQLite order counts, optional OpenAI Responses summaries, checked quotes, and fixed-role demo accounts. Public demo password for operations / people / leadership: **AtlasDemo-2026**. These public credentials must never protect real company data.
 
-The sample company contains 9 files and 15 orders. A question about 2024 orders returns **12**, including one cancelled order. A question about Studio Javor returns **5**. An ambiguous customer name prompts for clarification.
+Leadership can import text PDFs, DOCX, TXT and MD, replace the current text index with a version check, delete documents and deactivate other demo accounts. Page/paragraph locators accompany citations. Original binaries and historical document versions are not retained. Source changes during an AI request invalidate the answer; disabled identities lose server access immediately and open clients clear on their next poll. Previously downloaded copies cannot be revoked.
 
-### Features
-
-- Browse and search titles and contents of files allowed for the selected demo role; open their original CSV or Markdown content. Search returns metadata only.
-- Answer order-count and order-value questions with parameterized SQLite queries. The language model does not calculate these totals.
-- Summarize accessible documents with OpenAI. The model supplies verbatim evidence quotes, which the server checks against the authorized source files.
-- Demonstrate backend access checks for operations, people, and leadership roles, plus eight built-in QA scenarios and an audit trail that omits question text.
-- Download the visible answer with its authorized sources and counted rows as a text file. An expandable note explains the stack, API use, and demo-role limitations.
-
-### Workflow, implementation, and company adoption
-
-Select a demo role, browse or search accessible files, open a source, and ask an order-count or order-value question. Check the cited CSV rows. With a local API key, text-document questions can produce an AI summary with checked source excerpts. Changing the role demonstrates server-side filtering; the selector is **not authentication**.
-
-The implemented stack is **Python 3.13 standard library, SQLite, an HTTP server, HTML/CSS/JavaScript, and optional OpenAI Responses API**. CSV/Markdown files are indexed locally. Parameterized SQL handles numeric answers; only role-allowed text reaches the AI path. Exact quote matching does not establish that an interpretation is correct.
-
-For company use, first agree on a limited approved document set and access policy. Real deployment would need corporate sign-in, source-system permissions, tests for cross-role leakage, index retention and deletion, audit controls, durable API limits, and approval for sending text to an external AI provider. PDF/DOCX parsing and storage connectors are possible additions; this demo has none of these production controls.
-
-### Run and test
-
-Python 3.13+; no third-party packages.
-
-```sh
-python server.py
-python -m unittest discover -s test -v
-python evaluate.py
-```
-
-Open [http://127.0.0.1:4182](http://127.0.0.1:4182). The sample and exact counts work without an API key. AI summaries require `OPENAI_API_KEY` in the process environment or an ignored local `.env.local` file based on `.env.example`. Never commit a real key.
-
-### Scope and security
-
-**The role selector is a demo, not real authentication.** Anyone using the local app can select leadership, so use fictional data only. The server binds to loopback and must not be exposed publicly with real company files or a metered API key. A production version would need authenticated identities, permissions inherited from the source systems, and persistent usage controls.
-
-This version indexes prepared CSV and Markdown files only. It has no upload, PDF/DOCX parsing, general SQL generation, or multi-turn chat memory. AI evidence quotes are checked for exact occurrence, but a human must still verify their meaning. See [QA evidence](docs/QA.md) and [project scope](docs/PROJECT.md).
+Python 3.13+, SQLite, pypdf 6.21.4, plain HTML/CSS/JS; bounded parsing runs in a separate process. Install requirements.txt and run python server.py. Optional API credentials stay server-side and ignored by Git. Tests require requirements-dev.txt; pnpm qa runs isolated browser checks with AI disabled. 25 automated tests and 50 offline evaluation cases do not establish general AI accuracy. No OCR, SSO, inherited ACLs, arbitrary SQL or multi-turn chat. Company adoption requires those operational controls, approved data handling, production hosting, monitoring and broader evaluation.
