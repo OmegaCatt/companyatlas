@@ -164,7 +164,7 @@ def _customer_filter(question: str) -> str | None:
     match = re.search(r"\b(?:pro|zakaznika|klienta)\s+([^?.,]+)", normalize(question))
     if not match:
         return None
-    candidate = re.sub(r"\s+(?:v|za)\s+roce\s+20\d{2}.*$", "", match.group(1)).strip()
+    candidate = re.sub(r"\s+(?:v|za)\s+(?:roce|letech|rok|roky|obdobi)\s+20\d{2}.*$", "", match.group(1)).strip()
     candidate = re.sub(r"\s+v\s+20\d{2}.*$", "", candidate).strip()
     candidate = re.split(r"\s+(?:bez storn|jen dokonc|pouze dokonc|se stavem)", candidate)[0].strip()
     return candidate or None
@@ -179,12 +179,14 @@ def answer_order_count(connection: sqlite3.Connection, role: str, question: str,
     years = sorted(set(re.findall(r"\b20\d{2}\b", text)))
     if re.search(r"\b(prumer\w*|median\w*|nejvice|nejmene|minuly|minulem|tyden|tydnu)\b",text) or (len(years)==1 and re.search(r"\b(?:od|do)\s+(?:roku\s+)?20\d{2}\b",text)):
         return {"kind":"clarification","answer":"Tento typ filtru zatím nepodporuji. Zadejte počet nebo hodnotu objednávek za konkrétní celé roky.","sources":[]}
-    interval = re.search(r"\b(20\d{2})\s*(?:-|–|az)\s*(20\d{2})\b", text)
-    if interval:
-        first,last=map(int,interval.groups())
+    intervals = re.findall(r"\b(20\d{2})\s*(?:-|–|az|do(?:\s+roku)?)\s*(20\d{2})\b", text)
+    for first,last in intervals:
+        first,last=int(first),int(last)
         if first>last or last-first>20:
             return {"kind":"clarification","answer":"Zadejte vzestupné rozmezí nejvýše 21 let.","sources":[]}
-        years = [str(y) for y in range(first,last+1)]
+        years=sorted(set(years)|{str(year) for year in range(first,last+1)})
+    if len(years)>21 or re.search(r"\b(?:nad|pod|pres|vice nez|mene nez)\s+\d",text):
+        return {"kind":"clarification","answer":"Zadejte nejvýše 21 celých let. Filtr částky zatím nepodporuji.","sources":[]}
     year = years[0] if len(years)==1 else None
     status = None
     if re.search(r"bez\s+storn|nestorn", text): status = 'dokoncena'

@@ -47,7 +47,7 @@ pnpm qa
 
 Node 24 / Playwright slouží pro vývoj; volitelně ATLAS_PYTHON a PLAYWRIGHT_EXECUTABLE_PATH. QA používá dočasnou databázi, fiktivní PDF/DOCX a vypnuté API. Vývojová závislost ReportLab vytváří testovací PDF.
 
-**25 automatických testů**, 50 offline evaluačních případů (zahrnutých i v jednom testu), browser QA přihlášení, importu, výměny/mazání, oprávnění, deaktivace a mobilu. Dřívější malý živý běh 8/8 a první výsledek 6/8 jsou odděleně doložené v [evaluaci](docs/EVALUATION.md). V této etapě nebyla měřena živá kvalita AI nad importy. Viz [QA](docs/QA.md).
+**27 automatických testů**, 50 offline evaluačních případů (zahrnutých i v jednom testu), browser QA přihlášení, importu, výměny/mazání, oprávnění, deaktivace a mobilu. Dva širší živé běhy 17/17 (všechny textové otázky, dvě abstence a vložený pokyn), dřívější malý běh 8/8 a první výsledek 6/8 jsou odděleně doložené v [evaluaci](docs/EVALUATION.md). Širší živé běhy používají připravené texty; věcná kvalita AI nad libovolnými importy tím není ověřená. Viz [QA](docs/QA.md).
 
 ## Jak zavádět do firmy
 
@@ -59,4 +59,4 @@ A fictional company file explorer with exact SQLite order counts, optional OpenA
 
 Leadership can import text PDFs, DOCX, TXT and MD, replace the current text index with a version check, delete documents and deactivate other demo accounts. Page/paragraph locators accompany citations. Original binaries and historical document versions are not retained. Source changes during an AI request invalidate the answer; disabled identities lose server access immediately and open clients clear on their next poll. Previously downloaded copies cannot be revoked.
 
-Python 3.13+, SQLite, pypdf 6.21.4, plain HTML/CSS/JS; bounded parsing runs in a separate process. Install requirements.txt and run python server.py. Optional API credentials stay server-side and ignored by Git. Tests require requirements-dev.txt; pnpm qa runs isolated browser checks with AI disabled. 25 automated tests and 50 offline evaluation cases do not establish general AI accuracy. No OCR, SSO, inherited ACLs, arbitrary SQL or multi-turn chat. Company adoption requires those operational controls, approved data handling, production hosting, monitoring and broader evaluation.
+Python 3.13+, SQLite, pypdf 6.21.4, plain HTML/CSS/JS; bounded parsing runs in a separate process. Install requirements.txt and run python server.py. Optional API credentials stay server-side and ignored by Git. Tests require requirements-dev.txt; pnpm qa runs isolated browser checks with AI disabled. 27 automated tests and 50 offline evaluation cases do not establish general AI accuracy. No OCR, SSO, inherited ACLs, arbitrary SQL or multi-turn chat. Company adoption requires those operational controls, approved data handling, production hosting, monitoring and broader evaluation.

@@ -1,3 +1,7 @@
+# Závěrečná kontrola CA-1d / CA-2b/c
+
+27 Python testů a 50 offline případů prošlo. Složený zákazník před „v letech“, všechna rozmezí a další výslovné roky jsou zachované; od roku/do roku i odmítnutí nepodporované částky mají regresi. Dva širší živé běhy vyšly 17/17 a 17/17; zprávy jsou v evaluation-2026-11-10-full-1.json a full-2.json. Neshody ani chybné citace tyto dva běhy neukázaly. Viz EVALUATION.md pro ruční kontrolu a omezení.
+
 # Aktuální etapa 10. 11. 2026 – CA-4/5
 
 Pevné ukázkové účty, scrypt a odhlášení; deaktivace ruší relace i rozpracovanou odpověď. Vedení importuje textové PDF/DOCX/TXT/MD v omezeném procesu; lokátory, SHA-256, atomická verze/index a mazání. Staré odkazy vracejí konflikt, změna podkladu během AI ruší citace. Původní binární soubor ani úplný archiv verzí se neukládá. Veřejné demo heslo nechrání skutečná data. Aktuální limity a instalace jsou v README.
