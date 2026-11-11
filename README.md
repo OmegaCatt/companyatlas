@@ -4,6 +4,10 @@
 
 ![Pracovní rozhraní](docs/preview.png)
 
+## Veřejná ukázka
+
+[Krátký skutečný záznam](https://omegacatt.github.io/datadesk/portfolio/#companyatlas): SQL počet 12 → zdrojové řádky → 5 objednávek pro Studio Javor → změna účtu → odmítnutí přístupu. Izolovaná fiktivní databáze, AI vypnutá, české titulky. Nejde o živý veřejný backend. [Scénář a opakování nahrávky](docs/DEMO.md).
+
 ## Co řeší
 
 Provoz potřebuje spočítat objednávky a dohledat nákupní postup. Personální oddělení potřebuje vlastní dokumenty. Aplikace odděluje přístup na serveru a u odpovědi ukazuje podklad. Fiktivní Severka Studio má ve výchozí sadě 9 souborů a 15 objednávek. Dotaz na rok 2024 vrátí 12 objednávek včetně jedné stornované; Studio Javor má 5. Nejednoznačné jméno vyžaduje upřesnění.
@@ -54,6 +58,8 @@ Node 24 / Playwright slouží pro vývoj; volitelně ATLAS_PYTHON a PLAYWRIGHT_E
 Nejprve vybrat schválenou sadu podkladů, vlastníky a přesné otázky; rozhodnout, která data smí externímu poskytovateli. Další etapa by přidala firemní SSO a ACL ze zdrojových úložišť, HTTPS a produkční server, trvalé limity a monitoring, ochranu parseru v izolovaném prostředí, zálohy, retenční pravidla a větší opakované věcné evaluace. Veřejná demo hesla **nechrání reálné firemní dokumenty**. Tato aplikace naslouchá jen na loopbacku a je portfoliovou ukázkou, nikoli provozním interním systémem.
 
 ## English
+
+The public portfolio includes a captioned recording of an actual isolated local HTTP/SQLite walkthrough (12 orders, 5 for Studio Javor, source rows and denied access after switching accounts). AI is disabled in this recording; it is not a publicly hosted backend. See docs/DEMO.md for reproduction.
 
 A fictional company file explorer with exact SQLite order counts, optional OpenAI Responses summaries, checked quotes, and fixed-role demo accounts. Public demo password for operations / people / leadership: **AtlasDemo-2026**. These public credentials must never protect real company data.
 

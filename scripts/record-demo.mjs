@@ -1,0 +1,32 @@
+// Records an actual isolated local SQL/access-control walkthrough. No AI calls.
+import {spawn,execFileSync} from 'node:child_process';
+import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';import path from 'node:path';import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';import assert from 'node:assert/strict';import {chromium} from 'playwright';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const output=path.resolve(root,process.argv[2]||'docs/recording');await mkdir(output,{recursive:true});
+const temporary=await mkdtemp(path.join(tmpdir(),'atlas-record-'));
+const server=spawn(process.env.ATLAS_PYTHON||'python',['-u','-c','import sys;from pathlib import Path;from server import create_server;s=create_server(0,Path(sys.argv[1]),api_key="");print(s.server_port,flush=True);s.serve_forever()',path.join(temporary,'demo.sqlite')],{cwd:root,windowsHide:true,stdio:['ignore','pipe','ignore']});
+let browser;const cues=[];let started;
+const caption=text=>{const at=(Date.now()-started)/1000;if(cues.length)cues.at(-1).end=at;cues.push({start:at,text})};
+const timestamp=seconds=>new Date(Math.round(seconds*1000)).toISOString().slice(11,23);
+try{
+ const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Recording server startup timeout')),20000);server.once('error',reject);server.stdout.once('data',data=>{clearTimeout(timer);resolve(String(data).trim())})});assert.match(port,/^\d+$/);
+ browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});
+ const context=await browser.newContext({viewport:{width:1280,height:800},recordVideo:{dir:path.join(temporary,'video'),size:{width:1280,height:800}}});
+ const p=await context.newPage();const errors=[];p.on('pageerror',error=>errors.push(error.message));const video=p.video();started=Date.now();
+ caption('Skutečný místní běh nad fiktivními daty. AI je v tomto záznamu vypnutá.');await p.goto('http://127.0.0.1:'+port);
+ await p.locator('#login-dialog').waitFor({state:'visible'});await p.waitForTimeout(1500);
+ caption('Přihlášení provozního účtu. Roli ověřuje server.');await p.locator('#login-password').fill('AtlasDemo-2026');await p.locator('#login-submit').click();await p.locator('#login-dialog').waitFor({state:'hidden'});await p.waitForTimeout(1200);
+ caption('Kolik objednávek bylo v roce 2024? Počet spočítá SQLite.');await p.locator('#question').fill('Kolik objednávek bylo v roce 2024?');await p.waitForTimeout(1200);await p.locator('#ask-button').click();await p.waitForFunction(()=>!document.querySelector('#ask-button').disabled);assert.match(await p.locator('#answer-text').innerText(),/12/);await p.locator('#answer-section').scrollIntoViewIfNeeded();await p.waitForTimeout(4000);
+ caption('Dvanáct objednávek; ve zdroji jsou konkrétní započítané řádky.');await p.locator('#answer-sources button').first().click();await p.locator('#file-preview').waitFor({state:'visible'});assert.match(await p.locator('#dialog-content').innerText(),/O-2401/);await p.screenshot({path:path.join(output,'companyatlas-poster.png')});await p.waitForTimeout(4000);await p.locator('#dialog-close').click();
+ caption('Zúžení na Studio Javor. Pět objednávek, včetně jedné stornované.');await p.locator('#question').fill('Kolik objednávek bylo v roce 2024 pro Studio Javor?');await p.locator('#ask-button').click();await p.waitForFunction(()=>!document.querySelector('#ask-button').disabled);assert.match(await p.locator('#answer-text').innerText(),/5/);await p.locator('#answer-section').scrollIntoViewIfNeeded();await p.waitForTimeout(4000);
+ caption('Přepnutí na personální účet vyžaduje nové přihlášení a vymaže starou odpověď.');await p.locator('#role-select').selectOption('people');await p.locator('#login-dialog').waitFor({state:'visible'});await p.locator('#login-account').selectOption('people');await p.locator('#login-password').fill('AtlasDemo-2026');await p.locator('#login-submit').click();await p.locator('#login-dialog').waitFor({state:'hidden'});assert.equal(await p.locator('#answer-section').isVisible(),false);await p.waitForTimeout(1500);
+ caption('Personální účet nemá přístup k objednávkám. Server dotaz odmítne bez výsledku.');await p.locator('#question').fill('Kolik objednávek bylo v roce 2024?');await p.locator('#ask-button').click();await p.waitForFunction(()=>!document.querySelector('#ask-button').disabled);assert.match(await p.locator('#answer-text').innerText(),/nemáte přístup/);await p.locator('#answer-section').scrollIntoViewIfNeeded();await p.waitForTimeout(4000);
+ caption('Plná aplikace navíc umí textové PDF/DOCX a volitelné AI souhrny. Ty tento záznam neukazuje.');await p.waitForTimeout(2500);cues.at(-1).end=(Date.now()-started)/1000;assert.deepEqual(errors,[]);
+ await context.close();await video.saveAs(path.join(output,'companyatlas.webm'));
+ await writeFile(path.join(output,'companyatlas.vtt'),'WEBVTT\n\n'+cues.map((cue,index)=>(index+1)+'\n'+timestamp(cue.start)+' --> '+timestamp(cue.end)+'\n'+cue.text+'\n').join('\n'));
+ const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+ await writeFile(path.join(output,'companyatlas-recording.json'),JSON.stringify({recordedAt:new Date().toISOString(),sourceCommit:commit,scriptSha256:createHash('sha256').update(await readFile(fileURLToPath(import.meta.url))).digest('hex'),mode:'actual local HTTP/SQLite, fictional temporary database, AI disabled',verified:{year2024:12,studioJavor:5,peopleAccess:'denied',jsErrors:[]},captions:cues},null,2));
+ console.log('Recorded actual SQL/source/account walkthrough with captions; AI disabled.');
+}finally{await browser?.close();server.kill();if(server.exitCode===null)await new Promise(resolve=>server.once('exit',resolve));if(path.dirname(path.resolve(temporary))!==path.resolve(tmpdir())||!path.basename(temporary).startsWith('atlas-record-'))throw Error('Unexpected recording temporary path');await rm(temporary,{recursive:true,force:true})}

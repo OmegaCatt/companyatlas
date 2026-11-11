@@ -1,3 +1,7 @@
+# Nahrávka 11. 11. 2026 – DEMO-5
+
+Skutečný izolovaný HTTP/SQLite průchod b0a9ba1: 12 objednávek, zdroj CSV, 5 pro Studio Javor, změna účtu a odmítnutí přístupu; žádné JS chyby. Výstup 27,48 s a osm českých titulků. AI vypnutá; nahrávka není novou evaluací AI. Reprodukce docs/DEMO.md a scripts/record-demo.mjs. Přidána kontrola syntaxe skriptu.
+
 # Opakované ověření 10. 11. 2026
 
 **27 Python testů prošlo.** Znovu spuštěné prohlížečové QA ověřilo skutečný pracovní postup na dočasných fiktivních podkladech, desktop i mobil a JavaScript chyby. Navíc jeden nový skutečný AI dotaz nad fiktivním textem prošel (1/1) a offline sada 50/50. Je to aktuální smoke test, nikoli nová reprezentativní míra přesnosti.

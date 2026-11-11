@@ -1,3 +1,7 @@
+# Etapa ukázky 11. 11. 2026
+
+Veřejné portfolio má skutečnou krátkou nahrávku místního SQL/zdroj/oprávnění průchodu s vypnutou AI. Reprodukce docs/DEMO.md. Aplikační backend této etapy zůstal na již ověřeném kódu b0a9ba1; přibyl vývojový nahrávací skript a jeho syntax check. Znovu prošlo 27 Python testů, 50 offline případů a browser sada.
+
 # Aktuální rozsah a kontrola 10. 11. 2026
 
 Aktuální funkce, technologie, API, způsob použití, firemní zavedení a omezení jsou v [README](../README.md). Znovu prošlo 27 Python testů a odpovídající skutečný browser průchod desktop/mobil. Jde o fiktivní portfolio projekt. Výsledky a případné opravy jsou v [QA](QA.md).
