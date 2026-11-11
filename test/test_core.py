@@ -17,6 +17,15 @@ from server import quality_checks
 
 
 class CoreTests(unittest.TestCase):
+    def test_quality_details_use_observed_values_and_missing_source_cannot_pass_acl(self):
+        checks = quality_checks(self.connection)
+        self.assertTrue(all(check['actual'] == check['expected'] for check in checks))
+        self.assertTrue(all(check['question'] and check['method'] and check['category'] for check in checks))
+        self.connection.execute("DELETE FROM documents WHERE id='hr-record'")
+        affected = [c for c in quality_checks(self.connection) if c['name'] in ('Provoz nečte osobní složku', 'Vyhledávání nevydá personální dokument')]
+        self.assertEqual(len(affected), 2)
+        self.assertTrue(all(not check['passed'] for check in affected))
+
     def test_explicit_unsupported_answer_is_not_a_grounded_document(self):
         result=answer_question(self.connection,'people','Kolik dní dovolené má zaměstnanec?',lambda *_:{'supported':False,'answer':'Údaj chybí.','evidence':[{'source_id':'hr-leave','quote':'Zaměstnanec zadává žádost o dovolenou nejméně 10 pracovních dnů předem.'}]})
         self.assertEqual(result['kind'],'not_found')

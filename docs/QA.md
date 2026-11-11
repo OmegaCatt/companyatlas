@@ -1,3 +1,13 @@
+# UX-1 až UX-7 – 11. 11. 2026
+
+Nová regrese vyžaduje konkrétní expected/actual a skutečnou existenci zdroje v kontrolách oprávnění. Browser prověřil tři situace každé role, osobní podklad, 403 kontrolního API pro provoz a vedením znovu provedených 8/8 kontrol. Offline sada 50/50 není živé měření AI.
+
+Místně ověřené unit testy: **28 Python**.
+
+Každý účet má tři skutečné pracovní situace a sadu příkladů: provoz otevírá objednávky a dodavatele, personální tým zaškolení/dovolenou/osobní podklad, vedení interní plán a kontrolní panel. Tlačítka otevírají pouze soubory dostupné přihlášené roli; příprava otázky sama AI nevolá.
+
+Všech sedm aplikací má první přístupný dialog a stálé ovládání nápovědy v hlavičce. Playwright ověřuje skutečný první vstup, obě části, GitHub odkaz, Tab/Shift+Tab, Escape, návrat fokusu, potvrzení po reloadu a mobil. CompanyAtlas čeká s přihlášením na zavření úvodu; hlavička se testuje po přihlášení. Legacy pracovní průchody pokračují po skutečném zavření úvodu. Aktuální commit, CI a přesný rozsah ověření této etapy jsou vedené v hlavním Portfolio_PROGRESS.md; starší zápisy níže jsou historické.
+
 # Nahrávka 11. 11. 2026 – DEMO-5
 
 Skutečný izolovaný HTTP/SQLite průchod b0a9ba1: 12 objednávek, zdroj CSV, 5 pro Studio Javor, změna účtu a odmítnutí přístupu; žádné JS chyby. Výstup 27,48 s a osm českých titulků. AI vypnutá; nahrávka není novou evaluací AI. Reprodukce docs/DEMO.md a scripts/record-demo.mjs. Přidána kontrola syntaxe skriptu.

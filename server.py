@@ -37,6 +37,8 @@ from core import (
 
 WEB_ROOT = ROOT / "web"
 STATIC_FILES = {
+    "/guide.js": ("guide.js", "text/javascript; charset=utf-8"),
+    "/guide.css": ("guide.css", "text/css; charset=utf-8"),
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
@@ -105,17 +107,36 @@ class AppState:
 
 
 def quality_checks(connection) -> list[dict]:
-    checks = [
-        ("Počet objednávek 2024", answer_order_count(connection, "operations", "Kolik objednávek bylo v roce 2024?")["count"] == 12),
-        ("Součet hodnoty objednávek 2024", answer_question(connection, "operations", "Jaká byla celková hodnota objednávek v roce 2024?")["amountCzk"] == 210300),
-        ("Filtr zákazníka", answer_order_count(connection, "operations", "Kolik objednávek 2024 bylo pro Studio Javor?")["count"] == 5),
-        ("Nejednoznačný zákazník", len(answer_order_count(connection, "operations", "Kolik objednávek bylo pro Novák?").get("options", [])) == 2),
-        ("Personální tým nečte objednávky", answer_order_count(connection, "people", "Kolik objednávek 2024?")["kind"] == "denied"),
-        ("Provoz nečte osobní složku", get_document(connection, "operations", "hr-record") is None),
-        ("Personální tým nečte plán vedení", get_document(connection, "people", "leadership-plan") is None),
-        ("Provozní vyhledávání nevydá HR dokument", all(item["id"] != "hr-record" for item in search_documents(connection, "operations", "osobní složka Kláry"))),
-    ]
-    return [{"name": name, "passed": passed} for name, passed in checks]
+    checks = []
+    def record(name, category, question, expected, actual, method):
+        checks.append(dict(name=name, category=category, question=question, expected=expected,
+                           actual=actual, passed=actual == expected, method=method))
+    q = "Kolik objednávek bylo v roce 2024?"
+    record("Počet objednávek 2024", "SQL", q, 12,
+           answer_order_count(connection, "operations", q).get("count"), "Skutečný SQL dotaz nad aktuální fiktivní databází; očekávání vychází z referenčního CSV.")
+    q = "Jaká byla celková hodnota objednávek v roce 2024?"
+    record("Součet hodnoty objednávek 2024 (Kč)", "SQL", q, 210300,
+           answer_question(connection, "operations", q).get("amountCzk"), "Součet databázových částek proti nezávisle určenému referenčnímu součtu, včetně stornovaných záznamů.")
+    q = "Kolik objednávek 2024 bylo pro Studio Javor?"
+    record("Filtr zákazníka", "SQL", q, 5, answer_order_count(connection, "operations", q).get("count"), "Kombinace období a zákazníka; záznamy se automaticky neomezují jen na dokončené.")
+    q = "Kolik objednávek bylo pro Novák?"
+    record("Nejednoznačný zákazník", "Upřesnění", q, 2, len(answer_order_count(connection, "operations", q).get("options", [])), "Dvě různé identity se stejným základem názvu musí nabídnout upřesnění, nikoli sloučit zákazníky.")
+    q = "Kolik objednávek 2024?"
+    record("Personální tým nečte objednávky", "Oprávnění", q, "denied", answer_order_count(connection, "people", q).get("kind"), "Volá se stejná serverová funkce jako u dotazu; očekává se odmítnutí před výpočtem.")
+    record("Provoz nečte osobní složku", "Oprávnění", "Otevření osobního dokumentu provozním účtem",
+           {"existujeProVedeni": True, "vidiProvoz": False},
+           {"existujeProVedeni": get_document(connection, "leadership", "hr-record") is not None,
+            "vidiProvoz": get_document(connection, "operations", "hr-record") is not None}, "Kontroluje se existence podkladu pro vedení i jeho nedostupnost provozu. Chybějící dokument nesmí předstírat úspěšnou kontrolu oprávnění.")
+    record("Personální tým nečte plán vedení", "Oprávnění", "Otevření interního plánu personálním účtem",
+           {"existujeProVedeni": True, "vidiPersonalniTym": False},
+           {"existujeProVedeni": get_document(connection, "leadership", "leadership-plan") is not None,
+            "vidiPersonalniTym": get_document(connection, "people", "leadership-plan") is not None}, "Stejný dokument musí existovat pro vedení a nesmí být dostupný personálnímu účtu.")
+    results = search_documents(connection, "operations", "osobní složka Kláry")
+    record("Vyhledávání nevydá personální dokument", "Oprávnění", "Provoz hledá osobní složku",
+           {"existujeProVedeni": True, "unikVeVyhledavani": False},
+           {"existujeProVedeni": get_document(connection, "leadership", "hr-record") is not None,
+            "unikVeVyhledavani": any(item["id"] == "hr-record" for item in results)}, "Kontrola serverového filtru výsledků vyhledávání, nikoli pouze skrytí karty v rozhraní.")
+    return checks
 
 
 class AtlasHandler(BaseHTTPRequestHandler):

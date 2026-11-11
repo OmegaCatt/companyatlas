@@ -1,3 +1,9 @@
+# UX-1 až UX-7 – 11. 11. 2026
+
+Každý účet má tři skutečné pracovní situace a sadu příkladů: provoz otevírá objednávky a dodavatele, personální tým zaškolení/dovolenou/osobní podklad, vedení interní plán a kontrolní panel. Tlačítka otevírají pouze soubory dostupné přihlášené roli; příprava otázky sama AI nevolá.
+
+Všech sedm aplikací má první přístupný dialog a stálé ovládání nápovědy v hlavičce. Playwright ověřuje skutečný první vstup, obě části, GitHub odkaz, Tab/Shift+Tab, Escape, návrat fokusu, potvrzení po reloadu a mobil. CompanyAtlas čeká s přihlášením na zavření úvodu; hlavička se testuje po přihlášení. Legacy pracovní průchody pokračují po skutečném zavření úvodu. Aktuální commit, CI a přesný rozsah ověření této etapy jsou vedené v hlavním Portfolio_PROGRESS.md; starší zápisy níže jsou historické.
+
 # Etapa ukázky 11. 11. 2026
 
 Veřejné portfolio má skutečnou krátkou nahrávku místního SQL/zdroj/oprávnění průchodu s vypnutou AI. Reprodukce docs/DEMO.md. Aplikační backend této etapy zůstal na již ověřeném kódu b0a9ba1; přibyl vývojový nahrávací skript a jeho syntax check. Znovu prošlo 27 Python testů, 50 offline případů a browser sada.

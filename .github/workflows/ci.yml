@@ -32,7 +32,10 @@ jobs:
         with:
           name: companyatlas-qa
           path: |
+            docs/guide*.png
             docs/preview*.png
             docs/management.png
+            docs/role-*.png
+            docs/qa-details.png
             data/evaluation-ci.json
           retention-days: 7

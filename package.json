@@ -1,8 +1,15 @@
 {
-  "name":"companyatlas",
-  "private":true,
-  "type":"module",
-  "engines":{"node":">=24"},
-  "scripts":{"qa":"node scripts/qa.mjs","check":"node --check web/app.js && node --check scripts/record-demo.mjs"},
-  "devDependencies":{"playwright":"1.62.1"}
+  "name": "companyatlas",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "qa": "node scripts/qa.mjs",
+    "check": "node --check web/app.js && node --check scripts/record-demo.mjs && node --check web/guide.js && node --check scripts/guide-qa.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
 }

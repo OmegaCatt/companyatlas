@@ -1,8 +1,21 @@
 # CompanyAtlas
 
+## Orientace v aplikaci (11. 11. 2026)
+
+Při první návštěvě se otevře stručný návod. Po zavření si aplikace v tomto prohlížeči zapamatuje potvrzení; změna nemá vliv na obchodní data. V hlavičce lze kdykoli otevřít **Jak aplikaci používat** a **Technické informace**. Oba obsahy odkazují na úplný README zde na GitHubu. Pokud úložiště prohlížeče není dostupné, návod lze zavřít a aplikace dál funguje.
+
+Každý účet má tři skutečné pracovní situace a sadu příkladů: provoz otevírá objednávky a dodavatele, personální tým zaškolení/dovolenou/osobní podklad, vedení interní plán a kontrolní panel. Tlačítka otevírají pouze soubory dostupné přihlášené roli; příprava otázky sama AI nevolá.
+
+
 **Průzkumník fiktivních firemních souborů: přesné SQL odpovědi, AI souhrny s citacemi a přístup podle přihlášeného účtu.**
 
 ![Pracovní rozhraní](docs/preview.png)
+
+## Co ukazuje panel Testy a ověření
+
+Vedení může znovu provést osm kontrol nad aktuální fiktivní databází. Každý řádek lze rozbalit na zadání, očekávání, skutečný výsledek a metodu: SQL počet/součet, kombinovaný filtr, nejednoznačný zákazník a odepření přístupu/vyhledávání. Přístupový test zároveň vyžaduje existenci podkladu pro vedení, aby chybějící soubor nepředstíral úspěch.
+
+Panel nevolá AI. Dalších 50 offline případů, unit testy a dva dříve provedené živé běhy 17/17 mají vlastní metodiku v [EVALUATION.md](docs/EVALUATION.md). Tyto malé sady nepředstavují obecnou přesnost AI ani produkční bezpečnost.
 
 ## Veřejná ukázka
 
@@ -58,6 +71,9 @@ Node 24 / Playwright slouží pro vývoj; volitelně ATLAS_PYTHON a PLAYWRIGHT_E
 Nejprve vybrat schválenou sadu podkladů, vlastníky a přesné otázky; rozhodnout, která data smí externímu poskytovateli. Další etapa by přidala firemní SSO a ACL ze zdrojových úložišť, HTTPS a produkční server, trvalé limity a monitoring, ochranu parseru v izolovaném prostředí, zálohy, retenční pravidla a větší opakované věcné evaluace. Veřejná demo hesla **nechrání reálné firemní dokumenty**. Tato aplikace naslouchá jen na loopbacku a je portfoliovou ukázkou, nikoli provozním interním systémem.
 
 ## English
+
+First-time visitors see a keyboard-accessible guide; persistent header buttons reopen usage and technical information with a link to this README. Acknowledgement is browser-local and does not store business records. Three real role-specific workflows link to authorized source files: operations/orders and suppliers, people/onboarding and leave, leadership/internal plan and verification. Preparing a question does not call AI.
+
 
 The public portfolio includes a captioned recording of an actual isolated local HTTP/SQLite walkthrough (12 orders, 5 for Studio Javor, source rows and denied access after switching accounts). AI is disabled in this recording; it is not a publicly hosted backend. See docs/DEMO.md for reproduction.
 
