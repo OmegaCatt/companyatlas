@@ -1,3 +1,7 @@
+# Regrese UX-1b – rychlé zavření a reload
+
+První Linux main CI odhalilo závod: potvrzení úvodu v události close se někdy nestihlo zapsat před reloadem. Nyní se zapisuje synchronně v Escape/cancel a tlačítkách před zavřením; close je záložní cesta. Původní neúspěšný běh zůstává v Actions. Browser test stále provádí okamžitý reload, očekávání nebylo oslabeno ani přidán čekací čas.
+
 # UX-1 až UX-7 – 11. 11. 2026
 
 Nová regrese vyžaduje konkrétní expected/actual a skutečnou existenci zdroje v kontrolách oprávnění. Browser prověřil tři situace každé role, osobní podklad, 403 kontrolního API pro provoz a vedením znovu provedených 8/8 kontrol. Offline sada 50/50 není živé měření AI.
