@@ -1,5 +1,47 @@
 # CompanyAtlas
 
+## Rychlá ukázka pro zájemce a HR
+
+Vyhledá firemní podklady a spočítá objednávky; každý ukázkový účet vidí jen svoji oblast.
+
+**[Prohlédnout veřejnou ukázku](https://omegacatt.github.io/datadesk/portfolio/#companyatlas)** - bez instalace a přihlášení.
+
+Veřejný odkaz obsahuje stávající záznam místního běhu. Plnou aplikaci si spustíte na počítači podle návodu níže.
+
+## Spuštění krok za krokem (Windows)
+
+1. Nainstalujte **Python 3.13 nebo novější** z oficiálního webu [Python](https://www.python.org/downloads/windows/). Potom zavřete a znovu otevřete Terminál, pokud už běžel.
+2. Nahoře na této stránce GitHubu klikněte na zelené **Code** a potom **Download ZIP**.
+3. Stažený ZIP rozbalte: pravým tlačítkem → **Extrahovat vše**. Otevřete rozbalenou složku `companyatlas-main`. Pokud je uvnitř ještě jedna stejně pojmenovaná složka, otevřete i ji; musíte vidět soubor `server.py`.
+4. Otevřete v této složce **Terminál**. Jednoduchá cesta: v horním adresním řádku Průzkumníka napište `powershell` a stiskněte **Enter**. Otevře se příkazové okno přímo v této složce.
+
+Než aplikaci poprvé spustíte, napište postupně tyto dva příkazy. Po každém stiskněte **Enter** a počkejte na dokončení:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+Napište tento příkaz a stiskněte **Enter**:
+
+```powershell
+.\.venv\Scripts\python.exe server.py
+```
+
+Terminál **nechte otevřený**. To, že příkaz dál běží a nevrací se nový řádek pro psaní, je v pořádku. V prohlížeči otevřete:
+
+**[http://127.0.0.1:4182](http://127.0.0.1:4182)**
+
+Adresa vede jen do vašeho počítače. Aplikace používá připravená **fiktivní data**. Přihlaste se účtem **operations** a heslem **AtlasDemo-2026**. Jde o veřejné demo heslo pro fiktivní data. Zadejte **Kolik objednávek bylo v roce 2024?** Výsledek má být **12**; otevřete i jeho zdroj. Počty, procházení souborů a role fungují bez AI klíče.
+
+**AI souhrny jsou volitelné.** Bez klíče lze předvést SQL a oprávnění. Pro živé AI odpovědi se nastavuje klíč pouze na serveru podle `.env.example`; na GitHub nepatří.
+
+**Vypnutí:** vraťte se do Terminálu a stiskněte **Ctrl+C**. Pro příští spuštění znovu otevřete Terminál ve stejné složce a napište už jen spouštěcí příkaz výše.
+
+Pokud se objeví chyba, otevřete [řešení běžných potíží a další možnosti](docs/SPUSTENI.md). Vývojové testy ani znalost programování nejsou podmínkou pro prohlédnutí veřejné ukázky.
+
+---
+
 ## Orientace v aplikaci (11. 11. 2026)
 
 Při první návštěvě se otevře stručný návod. Po zavření si aplikace v tomto prohlížeči zapamatuje potvrzení; změna nemá vliv na obchodní data. V hlavičce lze kdykoli otevřít **Jak aplikaci používat** a **Technické informace**. Oba obsahy odkazují na úplný README zde na GitHubu. Pokud úložiště prohlížeče není dostupné, návod lze zavřít a aplikace dál funguje.

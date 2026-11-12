@@ -1,3 +1,7 @@
+# Snadné vyzkoušení - 12. 11. 2026
+
+Základní Windows návod je na začátku README; řešení potíží a volitelné předpoklady v docs/SPUSTENI.md. Netechnický návštěvník může začít existující veřejnou ukázkou. Ověření čisté kopie a hranice testu jsou v docs/QA.md. Jádro aplikace se touto dokumentační úpravou nemění.
+
 # UX-1 až UX-7 – 11. 11. 2026
 
 Každý účet má tři skutečné pracovní situace a sadu příkladů: provoz otevírá objednávky a dodavatele, personální tým zaškolení/dovolenou/osobní podklad, vedení interní plán a kontrolní panel. Tlačítka otevírají pouze soubory dostupné přihlášené roli; příprava otázky sama AI nevolá.
