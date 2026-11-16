@@ -1,0 +1,303 @@
+{
+  "recordedAt": "2026-11-16T14:30:54.239Z",
+  "sourceCommit": "25e9e8c3705156a868824616a99c172edb9f63a9",
+  "scriptSha256": "7d2c99ff6b1af79124fef2ade13611d978d483f29962f428a553b99d94e5cca3",
+  "helperSha256": "8bd32e09da868923588a49d51a05ebf2a391d3bc3fb264a3a3ca5d7813a81ace",
+  "videoSha256": "fc6485d60d211c8afcc29288a42ad1fc11240194d5e994a58c7bccd380b97808",
+  "mode": "actual isolated local HTTP/browser; fictional data; AI disabled; silent Full HD app-only recording",
+  "presentation": {
+    "width": 1920,
+    "height": 1080,
+    "captionFontPixels": 42,
+    "burnedInCaptions": true,
+    "visiblePointer": true,
+    "actualClickMarkers": true,
+    "audio": false,
+    "trimStartSeconds": 0.6
+  },
+  "verified": {
+    "year2024": 12,
+    "studioJavor": 5,
+    "peopleAccess": "denied",
+    "qualityChecks": 8,
+    "peopleSourceOpened": true,
+    "jsErrors": []
+  },
+  "captions": [
+    {
+      "start": 1.045,
+      "text": "CompanyAtlas: odpovědi z dokumentů a přístup podle role.",
+      "end": 4.584
+    },
+    {
+      "start": 4.584,
+      "text": "Přihlášení provozního účtu. Pracujeme pouze s veřejnými demo údaji.",
+      "end": 11.572
+    },
+    {
+      "start": 11.572,
+      "text": "Položíme otázku na počet objednávek v roce 2024.",
+      "end": 15.651
+    },
+    {
+      "start": 15.651,
+      "text": "Výsledek: 12 objednávek. Počet vypočítala databáze SQLite.",
+      "end": 21.641
+    },
+    {
+      "start": 21.641,
+      "text": "Otevřený zdroj ukazuje konkrétní řádky, ze kterých výsledek vznikl.",
+      "end": 27.704
+    },
+    {
+      "start": 27.704,
+      "text": "Zúžíme stejnou otázku na zákazníka Studio Javor.",
+      "end": 31.716
+    },
+    {
+      "start": 31.716,
+      "text": "Studio Javor: 5 objednávek, včetně jedné stornované.",
+      "end": 35.728
+    },
+    {
+      "start": 35.728,
+      "text": "Přepneme na personální účet. Změna role vyžaduje nové přihlášení.",
+      "end": 43.608
+    },
+    {
+      "start": 43.608,
+      "text": "Personální účet: otevřeme pravidla dovolené.",
+      "end": 46.822
+    },
+    {
+      "start": 46.822,
+      "text": "Personální účet otevře svůj podklad: pravidla dovolené.",
+      "end": 52.867
+    },
+    {
+      "start": 52.867,
+      "text": "Zkusíme dotaz na objednávky z personálního účtu.",
+      "end": 58.099
+    },
+    {
+      "start": 58.099,
+      "text": "Dotaz na objednávky je pro personální účet odmítnutý.",
+      "end": 62.106
+    },
+    {
+      "start": 62.106,
+      "text": "Přihlásíme vedení a otevřeme skutečné kontrolní scénáře.",
+      "end": 73.918
+    },
+    {
+      "start": 73.918,
+      "text": "Osm kontrol má očekávání i skutečný výsledek. Tento průchod AI nevolá.",
+      "end": 79.003
+    },
+    {
+      "start": 79.003,
+      "text": "Podrobný návod ke spuštění najdete v README projektu.",
+      "end": 83.008
+    }
+  ],
+  "actions": [
+    {
+      "kind": "fill",
+      "target": "login-password",
+      "x": 960,
+      "y": 605.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 5.835
+    },
+    {
+      "kind": "click",
+      "target": "login-submit",
+      "x": 960,
+      "y": 690.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 7.771
+    },
+    {
+      "kind": "fill",
+      "target": "question",
+      "x": 1077,
+      "y": 539.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 12.84
+    },
+    {
+      "kind": "click",
+      "target": "ask-button",
+      "x": 1610.59375,
+      "y": 540.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 14.82
+    },
+    {
+      "kind": "click",
+      "target": "Objednávky 2024 · řádky 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13",
+      "x": 635.3203125,
+      "y": 539.59375,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 20.84
+    },
+    {
+      "kind": "click",
+      "target": "Zavřít",
+      "x": 1887,
+      "y": 37,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 26.906
+    },
+    {
+      "kind": "fill",
+      "target": "question",
+      "x": 1077,
+      "y": 539.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 28.91
+    },
+    {
+      "kind": "click",
+      "target": "ask-button",
+      "x": 1610.59375,
+      "y": 540.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 30.886
+    },
+    {
+      "kind": "select",
+      "target": "Ukázkový účet",
+      "x": 678.953125,
+      "y": 34.5,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 36.972
+    },
+    {
+      "kind": "select",
+      "target": "login-account",
+      "x": 960,
+      "y": 534.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 38.892
+    },
+    {
+      "kind": "fill",
+      "target": "login-password",
+      "x": 960,
+      "y": 605.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 40.818
+    },
+    {
+      "kind": "click",
+      "target": "login-submit",
+      "x": 960,
+      "y": 690.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 42.804
+    },
+    {
+      "kind": "click",
+      "target": "Otevřít pravidla dovolené",
+      "x": 971.6796875,
+      "y": 533.765625,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 46.024
+    },
+    {
+      "kind": "click",
+      "target": "Zavřít",
+      "x": 1887,
+      "y": 37,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 52.044
+    },
+    {
+      "kind": "fill",
+      "target": "question",
+      "x": 1077,
+      "y": 539.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 55.292
+    },
+    {
+      "kind": "click",
+      "target": "ask-button",
+      "x": 1610.59375,
+      "y": 540.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 57.252
+    },
+    {
+      "kind": "select",
+      "target": "Ukázkový účet",
+      "x": 678.953125,
+      "y": 34.5,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 63.323
+    },
+    {
+      "kind": "select",
+      "target": "login-account",
+      "x": 960,
+      "y": 534.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 65.236
+    },
+    {
+      "kind": "fill",
+      "target": "login-password",
+      "x": 960,
+      "y": 605.203125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 67.168
+    },
+    {
+      "kind": "click",
+      "target": "login-submit",
+      "x": 960,
+      "y": 690.703125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 69.058
+    },
+    {
+      "kind": "click",
+      "target": "Otevřít testy a ověření",
+      "x": 1379.7109375,
+      "y": 533.765625,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 71.094
+    },
+    {
+      "kind": "click",
+      "target": "✓\nPočet objednávek 2024\nProšlo",
+      "x": 765.25,
+      "y": 540.453125,
+      "captionPosition": "bottom",
+      "captionOverlapsTarget": false,
+      "at": 73.091
+    }
+  ]
+}

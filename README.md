@@ -4,6 +4,14 @@
 
 Vyhledá firemní podklady a spočítá objednávky; každý ukázkový účet vidí jen svoji oblast.
 
+### Video ukázka
+
+**[Přehrát video — 1:26, bez zvuku](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4)** · [Co ukázka předvádí](docs/VIDEO.md)
+
+<a href="https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4"><img src="docs/videos/companyatlas-poster.png" alt="Přehrát video aplikace CompanyAtlas" width="720"></a>
+
+Skutečný průchod aplikací s českými titulky a viditelnou myší. Klikněte na náhled nebo odkaz nad ním; není potřeba nic instalovat. [Soubor MP4 na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4).
+
 **[Prohlédnout veřejnou ukázku](https://omegacatt.github.io/datadesk/portfolio/#companyatlas)** - bez instalace a přihlášení.
 
 Veřejný odkaz obsahuje stávající záznam místního běhu. Plnou aplikaci si spustíte na počítači podle návodu níže.
