@@ -6,11 +6,11 @@ Vyhledá firemní podklady a spočítá objednávky; každý ukázkový účet v
 
 ### Video ukázka
 
-**[Přehrát video — 1:26, bez zvuku](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4)** · [Co ukázka předvádí](docs/VIDEO.md)
+**[Stáhnout video MP4 — 1:26, bez zvuku](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4)** · [Co ukázka předvádí](docs/VIDEO.md)
 
-<a href="https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4"><img src="docs/videos/companyatlas-poster.png" alt="Přehrát video aplikace CompanyAtlas" width="720"></a>
+<a href="https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4"><img src="docs/videos/companyatlas-poster.png" alt="Stáhnout video aplikace CompanyAtlas" width="720"></a>
 
-Skutečný průchod aplikací s českými titulky a viditelnou myší. Klikněte na náhled nebo odkaz nad ním; není potřeba nic instalovat. [Soubor MP4 na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4).
+Skutečný průchod aplikací s českými titulky a viditelnou myší. Kliknutím na náhled stáhnete video MP4; po stažení jej otevřete v běžném přehrávači videa. Samotnou aplikaci není potřeba instalovat. [Soubor MP4 na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4).
 
 **[Prohlédnout veřejnou ukázku](https://omegacatt.github.io/datadesk/portfolio/#companyatlas)** - bez instalace a přihlášení.
 

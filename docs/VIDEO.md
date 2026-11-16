@@ -1,6 +1,6 @@
 # CompanyAtlas: video ukázka
 
-**[Přehrát MP4 — 1:26, bez zvuku](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4)** · [Soubor na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4)
+**[Stáhnout MP4 — 1:26, bez zvuku](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4)** · [Soubor na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4)
 
 SQL odpovědi 12/5, zdrojové řádky, tři účty a přístupové kontroly.
 
@@ -12,7 +12,7 @@ SQL odpovědi 12/5, zdrojové řádky, tři účty a přístupové kontroly.
 
 Video zachycuje skutečnou aplikaci nad izolovanými fiktivními daty. Má rozlišení **1920 × 1080**, **25 snímků/s**, přibližně **10.2 MB** a české titulky přímo v obrazu. Pohyb myši i kliknutí jsou viditelné. **Neobsahuje zvukovou stopu.**
 
-Ukázka nepotřebuje instalaci aplikace. Pro vlastní vyzkoušení pokračujte [návodem ke spuštění](../README.md#spuštění-krok-za-krokem-windows).
+Odkaz stáhne video MP4. Po stažení jej otevřete v běžném přehrávači videa. Ukázka nepotřebuje instalaci aplikace. Pro vlastní vyzkoušení pokračujte [návodem ke spuštění](../README.md#spuštění-krok-za-krokem-windows).
 
 ## Jak byl záznam ověřen
 
@@ -24,4 +24,4 @@ Scénář: [scripts/record-demo.mjs](../scripts/record-demo.mjs). Nahrávací vr
 
 ## English
 
-**[Watch the silent Full HD demo (1:26)](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4).** Czech captions are burned into the image; the pointer and actual clicks are visible. Recorded from the real application using isolated fictional data, with result assertions and no AI API calls. Full decoding, playback, seeking and absence of audio were verified. [Run the application locally](../README.md#spuštění-krok-za-krokem-windows).
+**[Download the silent Full HD demo (1:26)](https://raw.githubusercontent.com/OmegaCatt/companyatlas/main/docs/videos/companyatlas.mp4).** Open the downloaded MP4 in a standard video player. Czech captions are burned into the image; the pointer and actual clicks are visible. Recorded from the real application using isolated fictional data, with result assertions and no AI API calls. Full decoding, playback, seeking and absence of audio were verified. [Run the application locally](../README.md#spuštění-krok-za-krokem-windows).
