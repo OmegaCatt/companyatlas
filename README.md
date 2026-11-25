@@ -12,9 +12,7 @@ Vyhledá firemní podklady a spočítá objednávky; každý ukázkový účet v
 
 Skutečný průchod aplikací s českými titulky a viditelnou myší. Kliknutím na náhled stáhnete video MP4; po stažení jej otevřete v běžném přehrávači videa. Samotnou aplikaci není potřeba instalovat. [Soubor MP4 na GitHubu](https://github.com/OmegaCatt/companyatlas/blob/main/docs/videos/companyatlas.mp4).
 
-**[Prohlédnout veřejnou ukázku](https://omegacatt.github.io/datadesk/portfolio/#companyatlas)** - bez instalace a přihlášení.
-
-Veřejný odkaz obsahuje stávající záznam místního běhu. Plnou aplikaci si spustíte na počítači podle návodu níže.
+Plnou aplikaci si můžete vyzkoušet po místním spuštění podle návodu níže; online živá verze není dostupná.
 
 ## Spuštění krok za krokem (Windows)
 
@@ -69,7 +67,7 @@ Panel nevolá AI. Dalších 50 offline případů, unit testy a dva dříve prov
 
 ## Veřejná ukázka
 
-[Krátký skutečný záznam](https://omegacatt.github.io/datadesk/portfolio/#companyatlas): SQL počet 12 → zdrojové řádky → 5 objednávek pro Studio Javor → změna účtu → odmítnutí přístupu. Izolovaná fiktivní databáze, AI vypnutá, české titulky. Nejde o živý veřejný backend. [Scénář a opakování nahrávky](docs/DEMO.md).
+[Samostatné video ukázky](docs/VIDEO.md): SQL počet 12 → zdrojové řádky → 5 objednávek pro Studio Javor → změna účtu → odmítnutí přístupu. Izolovaná fiktivní databáze, AI vypnutá, české titulky. Nejde o živý veřejný backend. [Scénář a opakování nahrávky](docs/DEMO.md).
 
 ## Co řeší
 
@@ -125,7 +123,7 @@ Nejprve vybrat schválenou sadu podkladů, vlastníky a přesné otázky; rozhod
 First-time visitors see a keyboard-accessible guide; persistent header buttons reopen usage and technical information with a link to this README. Acknowledgement is browser-local and does not store business records. Three real role-specific workflows link to authorized source files: operations/orders and suppliers, people/onboarding and leave, leadership/internal plan and verification. Preparing a question does not call AI.
 
 
-The public portfolio includes a captioned recording of an actual isolated local HTTP/SQLite walkthrough (12 orders, 5 for Studio Javor, source rows and denied access after switching accounts). AI is disabled in this recording; it is not a publicly hosted backend. See docs/DEMO.md for reproduction.
+The project video includes a captioned recording of an actual isolated local HTTP/SQLite walkthrough (12 orders, 5 for Studio Javor, source rows and denied access after switching accounts). AI is disabled in this recording; it is not a publicly hosted backend. See docs/DEMO.md for reproduction.
 
 A fictional company file explorer with exact SQLite order counts, optional OpenAI Responses summaries, checked quotes, and fixed-role demo accounts. Public demo password for operations / people / leadership: **AtlasDemo-2026**. These public credentials must never protect real company data.
 

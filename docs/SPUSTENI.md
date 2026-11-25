@@ -1,6 +1,6 @@
 # CompanyAtlas: když se spuštění nedaří
 
-Základní postup s přesným příkazem a adresou je na [začátku README](../README.md#spuštění-krok-za-krokem-windows). Pro rychlé posouzení projektu stačí [veřejná ukázka](https://omegacatt.github.io/datadesk/portfolio/#companyatlas).
+Základní postup s přesným příkazem a adresou je na [začátku README](../README.md#spuštění-krok-za-krokem-windows). Aplikace nemá živou veřejnou verzi; pro prohlédnutí bez instalace je k dispozici video v README.
 
 - **„Příkaz nebyl rozpoznán“:** nainstalujte Python 3.13 nebo novější a otevřete nové okno Terminálu. Node ověříte příkazem `node --version`, Python příkazem `py -3 --version`. Pokud máte více verzí Pythonu, zkontrolujte, že vybraná má alespoň 3.13.
 - **Soubor server.py / server.mjs nebyl nalezen:** Terminál je v jiné složce. Zavřete ho, v Průzkumníku otevřete rozbalenou složku projektu a z jejího adresního řádku znovu spusťte `powershell`. ZIP musí být rozbalený.
@@ -11,4 +11,4 @@ Základní postup s přesným příkazem a adresou je na [začátku README](../R
 
 ## English quick start
 
-View the [existing public portfolio preview](https://omegacatt.github.io/datadesk/portfolio/#companyatlas) without installing anything. Server-based projects are demonstrated through stored results; this is not a public live backend. For the full local application, download and extract this repository's ZIP, install Python 3.13+, open a terminal in the extracted project directory and follow the commands at the top of the README. Keep that terminal running and open http://127.0.0.1:4182. Stop with Ctrl+C. The demonstration uses fictional data; the basic prepared-data demo requires no paid AI calls. Detailed developer tests remain separate from the basic walkthrough.
+There is no public live version; the README links to a recorded demonstration. For the full local application, download and extract this repository's ZIP, install Python 3.13+, open a terminal in the extracted project directory and follow the commands at the top of the README. Keep that terminal running and open http://127.0.0.1:4182. Stop with Ctrl+C. The demonstration uses fictional data; the basic prepared-data demo requires no paid AI calls. Detailed developer tests remain separate from the basic walkthrough.
